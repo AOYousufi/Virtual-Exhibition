@@ -25,7 +25,7 @@ const ClassificationDropdown = ({ onSelect }) => {
     <div>
       <label>Select Classification:</label>
       <select value={selectedClassification} onChange={handleChange}>
-        <option value="">All</option>
+        <option value="any">All</option>
         {classifications.map((cls) => (
           <option key={JSON.stringify(cls.id)} value={JSON.stringify(cls.id)}>
             {cls.name}

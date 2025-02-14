@@ -4,6 +4,8 @@ import { getAllArtworks } from "../../api";
 import ArtCard from "../Artworks/ArtCard";
 import ClassificationDropdown from "./Classifications"; 
 import TechniqueDropdown from "./Filter/Techniuqe";
+import SortsDropdown from "./Sort";
+import SortOrderDropdown from "./SortOrder";
 
 const Artworks = () => {
   const location = useLocation();
@@ -16,6 +18,8 @@ const Artworks = () => {
   const [page, setPage] = useState(1);
   const [classification, setClassification] = useState(""); 
 const [technique , setTechnique] = useState("")
+const [sortOpt , setSortOpt] = useState('')
+const [sortOrder, setSortOrder] = useState("asc")
 console.log(technique);
   useEffect(() => {
     if (!query) return;
@@ -23,13 +27,14 @@ console.log(technique);
     setLoading(true);
     setError(null);
 
-    getAllArtworks(query, page,classification , technique)
+    getAllArtworks(query, page,classification , technique , sortOpt, sortOrder)
       .then((data) => setArtworks(data))
       .catch((err) => {console.log(err);
         setError("Failed to fetch artworks")})
       .finally(() => setLoading(false));
-  }, [query, page , classification , technique]); 
+  }, [query, page , classification , technique , sortOpt , sortOrder]); 
   console.log(classification);
+  console.log(sortOpt, "sortopt");
   return (
     <div style={{ padding: "20px" }}>
       <h2>Showing results for: "{query}"</h2>
@@ -37,6 +42,8 @@ console.log(technique);
    
       <ClassificationDropdown onSelect={setClassification} />
         <TechniqueDropdown onSelect={setTechnique}/>
+        <SortsDropdown onSelect={setSortOpt}/>
+        <SortOrderDropdown onSelect={setSortOrder}/>
       {loading && <p>Loading...</p>}
       {error && <p style={{ color: "red" }}>{error}</p>}
 
