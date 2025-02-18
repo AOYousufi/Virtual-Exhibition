@@ -7,7 +7,7 @@ const harvardApi = axios.create({
     },
 });
 
-const vnaApi = axios.create({ baseURL: "https://api.vam.ac.uk/v2/objects" });
+const vnaApi = axios.create({ baseURL: "https://api.vam.ac.uk/v2" });
 
 const getHarvardArtWorks = (query, page = 1, classification, technique , sortOpt , sortOrder) => {
     console.log(classification, technique);
@@ -17,6 +17,8 @@ const getHarvardArtWorks = (query, page = 1, classification, technique , sortOpt
     if (classification && classification !== "any") {
         params.classification = classification;
     }
+
+    
     if (technique && technique !== "any") {
         params.technique = technique;
     }
@@ -43,10 +45,95 @@ const getVnaArtworks = (query, page = 1, classification, technique, sortOpt, sor
     }
 
     return vnaApi
-        .get("/search", { params })
+        .get("/objects/search", { params })
         .then(({ data }) => data.records)
         .catch(err => console.error(err));
 };
+
+const fetchArtById = (id) => {
+    if (id.startsWith("O") || id.startsWith("o")) {
+      // V&A API response
+      return vnaApi
+        .get(`/object/${id}`)
+        .then(({ data }) => {
+          const record = data.record;
+          const meta = data.meta;
+          return {
+            // Identification
+            id: record.systemNumber,
+            // Images
+            image: meta.images._iiif_image + "full/full/0/default.jpg",
+            // Title
+            title: record.titles?.[0]?.title || "No Title Available",
+            // Date/Production
+            date: record.productionDates?.[0]?.date?.text || "Unknown",
+            // Medium & Materials
+            medium: record.materialsAndTechniques || "Not specified",
+            // Dimensions (join array into a string)
+            dimensions: record.dimensions
+              ? record.dimensions
+                  .map(
+                    (dim) => `${dim.dimension}: ${dim.value} ${dim.unit}${
+                      dim.qualifier ? ` (${dim.qualifier})` : ""
+                    }`
+                  )
+                  .join(", ")
+              : "Not provided",
+            // Description
+            description: record.summaryDescription || "No description available.",
+            // Provenance/History
+            provenance: record.objectHistory || "Not available",
+            // Location
+            location:
+              record.galleryLocations?.[0]?.current?.text ||
+              "No specific location",
+            // Credit Line
+            creditLine: record.creditLine || "No credit line",
+          };
+        })
+        .catch((err) => {
+          console.error("Error fetching from V&A API:", err);
+          throw err;
+        });
+    } else {
+      // Harvard API response
+      return harvardApi
+        .get(`/object/${id}`)
+        .then(({ data }) => {
+          return {
+            // Identification
+            id: data.objectid || data.id,
+            // Images
+            image: data.primaryimageurl || "https://via.placeholder.com/400",
+            // Title
+            title: data.title || data.titles?.[0]?.title || "No Title Available",
+            // Date/Production
+            date: data.dated || "Unknown",
+            // Medium & Materials
+            medium: data.medium || "Not specified",
+            // Dimensions (usually a single string)
+            dimensions: data.dimensions || "Not provided",
+            // Description
+            description: data.description || "No description available.",
+            // Provenance/History
+            provenance: data.provenance || "Not available",
+            // Location (from gallery or places array)
+            location:
+              (data.gallery && data.gallery.name) ||
+              data.places?.[0]?.displayname ||
+              "No specific location",
+            // Credit Line
+            creditLine: data.creditline || "No credit line",
+          };
+        })
+        .catch((err) => {
+          console.error("Error fetching from Harvard API:", err);
+          throw err;
+        });
+    }
+  };
+  
+
 
 const getAllArtworks = async (query, page = 1, classification , technique ,sortOpt, sortOrder, minResults = 18) => {
     let artworks = [];
@@ -75,4 +162,4 @@ console.log(sortOrder);
     return artworks.slice(0, minResults);
 };
 
-export { getHarvardArtWorks, getVnaArtworks, getAllArtworks };
+export { getHarvardArtWorks, getVnaArtworks, getAllArtworks , fetchArtById };

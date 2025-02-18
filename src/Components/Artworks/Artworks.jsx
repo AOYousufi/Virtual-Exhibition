@@ -53,7 +53,8 @@ console.log(technique);
         ))}
       </div>
 
-      {/* Pagination Controls */}
+     
+     
       <div style={{ display: "flex", justifyContent: "center", marginTop: "20px" }}>
         <button
           onClick={() => setPage((prev) => Math.max(prev - 1, 1))}

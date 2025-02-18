@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import ExhibitionView from "../CollectionManager";
 
 const Home = () => {
   const [query, setQuery] = useState("");
@@ -30,6 +31,7 @@ const Home = () => {
       <button onClick={handleSearch} style={{ padding: "10px 15px", fontSize: "16px", cursor: "pointer" }}>
         Search
       </button>
+   
     </div>
   );
 };

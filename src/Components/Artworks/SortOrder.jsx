@@ -6,7 +6,7 @@ const SortOrderDropdown = ({ onSelect }) => {
   const handleChange = (event) => {
     const value = event.target.value;
     setSelectedSortOrder(value);
-    onSelect(value); // Pass "asc" or "desc" to the parent
+    onSelect(value); 
   };
 
   return (
