@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
-import { getAllArtworks } from "../../api";
-import ArtCard from "../Artworks/ArtCard";
-import ClassificationDropdown from "./Classifications"; 
+import { getAllArtworks } from "../../APIs/api";
+import ArtCard from "./ArtCard/ArtCard";
+import ClassificationDropdown from "./Filter/Classifications"; 
 import TechniqueDropdown from "./Filter/Techniuqe";
-import SortsDropdown from "./Sort";
-import SortOrderDropdown from "./SortOrder";
-
+import SortsDropdown from "./Filter/Sort";
+import SortOrderDropdown from "./Filter/SortOrder";
+import "./Artworks.css"
 const Artworks = () => {
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
@@ -36,37 +36,35 @@ console.log(technique);
   console.log(classification);
   console.log(sortOpt, "sortopt");
   return (
-    <div style={{ padding: "20px" }}>
-      <h2>Showing results for: "{query}"</h2>
-
-   
-      <ClassificationDropdown onSelect={setClassification} />
-        <TechniqueDropdown onSelect={setTechnique}/>
-        <SortsDropdown onSelect={setSortOpt}/>
-        <SortOrderDropdown onSelect={setSortOrder}/>
-      {loading && <p>Loading...</p>}
-      {error && <p style={{ color: "red" }}>{error}</p>}
-
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: "20px" }}>
+    <div className="artworks-container">
+      <h2 className="artworks-title">Showing results for: "{query}"</h2>
+      
+      <div className="filters-container">
+        <ClassificationDropdown onSelect={setClassification} />
+        <TechniqueDropdown onSelect={setTechnique} />
+        <SortsDropdown onSelect={setSortOpt} />
+        <SortOrderDropdown onSelect={setSortOrder} />
+      </div>
+      
+      {loading && <p className="loading">Loading...</p>}
+      {error && <p className="error">{error}</p>}
+  
+      <div className="artworks-grid">
         {artworks.map((art, index) => (
           <ArtCard key={index} art={art} />
         ))}
       </div>
-
-     
-     
-      <div style={{ display: "flex", justifyContent: "center", marginTop: "20px" }}>
+  
+      <div className="pagination">
         <button
           onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
           disabled={page === 1}
-          style={{ marginRight: "10px", padding: "10px", cursor: "pointer" }}
         >
           Previous
         </button>
         <span>Page {page}</span>
         <button
           onClick={() => setPage((prev) => prev + 1)}
-          style={{ marginLeft: "10px", padding: "10px", cursor: "pointer" }}
         >
           Next
         </button>

@@ -1,4 +1,5 @@
-import { useState } from "react";
+import React, { useState } from "react";
+import './Technique.css'
 
 const techniques = [
   { id: { harvardId: 116, vnaID: "AAT53241" }, name: "Etching" },
@@ -14,16 +15,29 @@ const TechniqueDropdown = ({ onSelect }) => {
   const [selectedTechnique, setSelectedTechnique] = useState("");
 
   const handleChange = (event) => {
-    const selectedId = event.target.value;
-    const selectedTech = techniques.find(tech => JSON.stringify(tech.id) === selectedId);
-    setSelectedTechnique(selectedId);
-    onSelect(selectedTech ? selectedTech.id : null);
+    const selectedValue = event.target.value;
+    setSelectedTechnique(selectedValue);
+    if (selectedValue === "") {
+      onSelect(null);
+    } else {
+      const selectedTech = techniques.find(
+        (tech) => JSON.stringify(tech.id) === selectedValue
+      );
+      onSelect(selectedTech ? selectedTech.id : null);
+    }
   };
 
   return (
-    <div>
-      <label>Select Technique:</label>
-      <select value={selectedTechnique} onChange={handleChange}>
+    <div className="dropdown-container">
+      <label className="dropdown-label" htmlFor="technique-select">
+        Select Technique:
+      </label>
+      <select
+        id="technique-select"
+        className="dropdown-select"
+        value={selectedTechnique}
+        onChange={handleChange}
+      >
         <option value="">All</option>
         {techniques.map((tech) => (
           <option key={JSON.stringify(tech.id)} value={JSON.stringify(tech.id)}>

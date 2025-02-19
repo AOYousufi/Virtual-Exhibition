@@ -12,7 +12,7 @@ const vnaApi = axios.create({ baseURL: "https://api.vam.ac.uk/v2" });
 const getHarvardArtWorks = (query, page = 1, classification, technique , sortOpt , sortOrder) => {
     console.log(classification, technique);
 
-    let params = { q: query, page: page, size: 10, sort:"random",sortorder :sortOrder };
+    let params = { q: query, page: page, size: 10, sort:"accessionyear",sortorder :sortOrder };
 
     if (classification && classification !== "any") {
         params.classification = classification;

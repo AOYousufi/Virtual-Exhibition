@@ -1,10 +1,8 @@
 import { useParams } from 'react-router-dom';
-import { fetchArtById } from '../api';
+import { fetchArtById } from '../../../APIs/api';
 import { useState, useEffect } from 'react';
-import { useCollections } from './CollectionContext';
+import { useCollections } from '../../Context/CollectionContext';
 import './singleArt.css';
-import ExhibitionView from './ExhibitonVIew';
-import CollectionManager from './CollectionManager';
 
 const SingleArt = () => {
   const { id } = useParams();
@@ -39,59 +37,61 @@ const SingleArt = () => {
     }
   };
 
+
+  console.log(artDetails.image);
   return (
-    <section className="art-container">
-      {artDetails.title && <h1 className="art-title">{artDetails.title}</h1>}
-      <div className="art-content">
+    <section className="single-art-container">
+      {artDetails.title && <h1 className="single-art-title">{artDetails.title}</h1>}
+      <div className="single-art-content">
         {artDetails.image && (
-          <div className="art-image">
+          <div className="single-art-image">
             <img src={artDetails.image} alt={artDetails.title} />
           </div>
         )}
-        <div className="art-details">
+        <div className="single-art-details">
           {artDetails.date && (
-            <p>
+            <p className="single-art-info">
               <strong>Date:</strong> {artDetails.date}
             </p>
           )}
           {artDetails.medium && (
-            <p>
+            <p className="single-art-info">
               <strong>Medium:</strong> {artDetails.medium}
             </p>
           )}
           {artDetails.dimensions && (
-            <p>
+            <p className="single-art-info">
               <strong>Dimensions:</strong> {artDetails.dimensions}
             </p>
           )}
           {artDetails.description && (
             <>
-              <p>
+              <p className="single-art-info">
                 <strong>Description:</strong>
               </p>
               <div
-                className="art-description"
+                className="single-art-description"
                 dangerouslySetInnerHTML={{ __html: artDetails.description }}
               />
             </>
           )}
           {artDetails.provenance && (
-            <p>
+            <p className="single-art-info">
               <strong>Provenance:</strong> {artDetails.provenance}
             </p>
           )}
           {artDetails.location && (
-            <p>
+            <p className="single-art-info">
               <strong>Location:</strong> {artDetails.location}
             </p>
           )}
           {artDetails.creditLine && (
-            <p>
+            <p className="single-art-info">
               <strong>Credit Line:</strong> {artDetails.creditLine}
             </p>
           )}
 
-          {/* Add to Collection Section */}
+
           <div className="add-to-collection">
             <label htmlFor="collectionSelect">Add to Collection:</label>
             <select
@@ -111,9 +111,6 @@ const SingleArt = () => {
             </button>
           </div>
         </div>
-    
-<ExhibitionView collectionId={collections?.[0]?.id}/>
-<CollectionManager/>
       </div>
     </section>
   );

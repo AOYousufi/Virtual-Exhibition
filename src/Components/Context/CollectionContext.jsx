@@ -5,50 +5,50 @@ const CollectionsContext = createContext();
 export const useCollections = () => useContext(CollectionsContext);
 
 export const CollectionsProvider = ({ children }) => {
-  const [collections, setCollections] = useState([]);
+  
+  const [collections, setCollections] = useState(() => {
+    const saved = localStorage.getItem('collections');
+    return saved ? JSON.parse(saved) : [];
+  });
+  
   console.log(collections);
 
- 
-  useEffect(() => {
-    const saved = localStorage.getItem('collections');
-    if (saved) {
-      setCollections(JSON.parse(saved));
-    }
-  }, []);
-
-
+  
   useEffect(() => {
     localStorage.setItem('collections', JSON.stringify(collections));
   }, [collections]);
 
-
   const addCollection = (name) => {
     const newCollection = {
-      id: Date.now().toString(), 
+      id: Date.now().toString(),
       name,
       items: [],
     };
-    setCollections([...collections, newCollection]);
+    setCollections((prev) => [...prev, newCollection]);
   };
 
   const removeCollection = (collectionId) => {
-    setCollections(collections.filter(col => col.id !== collectionId));
+    setCollections((prev) => prev.filter(col => col.id !== collectionId));
   };
 
   const addItemToCollection = (collectionId, item) => {
-    setCollections(collections.map(col =>
-      col.id === collectionId
-        ? { ...col, items: [...col.items, item] }
-        : col
-    ));
+    setCollections((prev) =>
+      prev.map(col =>
+        col.id === collectionId
+          ? { ...col, items: [...col.items, item] }
+          : col
+      )
+    );
   };
 
   const removeItemFromCollection = (collectionId, itemId) => {
-    setCollections(collections.map(col =>
-      col.id === collectionId
-        ? { ...col, items: col.items.filter(item => item.id !== itemId) }
-        : col
-    ));
+    setCollections((prev) =>
+      prev.map(col =>
+        col.id === collectionId
+          ? { ...col, items: col.items.filter(item => item.id !== itemId) }
+          : col
+      )
+    );
   };
 
   return (

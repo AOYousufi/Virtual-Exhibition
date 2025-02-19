@@ -1,0 +1,117 @@
+
+.single-art-container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: 'Helvetica Neue', sans-serif;
+  color: #333;
+}
+
+
+.single-art-title {
+  text-align: center;
+  font-size: 2rem;
+  margin-bottom: 20px;
+  color: #222;
+}
+
+
+.single-art-content {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+
+.single-art-image {
+  flex: 1 1 300px;
+  max-width: 400px;
+  overflow: hidden;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.single-art-image img {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+}
+
+
+.single-art-details {
+  flex: 2 1 400px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+
+.single-art-info {
+  font-size: 1rem;
+  margin: 5px 0;
+}
+
+
+.single-art-description {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  font-style: italic;
+  margin-top: 5px;
+}
+
+
+.add-to-collection {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.add-to-collection label {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #444;
+}
+
+.add-to-collection select {
+  padding: 8px 12px;
+  font-size: 1rem;
+  border: 2px solid #ddd;
+  border-radius: 4px;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  max-width: 250px;
+}
+
+.add-to-collection select:focus {
+  outline: none;
+  border-color: #ff7e5f;
+  box-shadow: 0 0 5px rgba(255, 126, 95, 0.5);
+}
+
+.add-to-collection button {
+  padding: 10px 20px;
+  font-size: 1rem;
+  background-color: #ff7e5f;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  max-width: 250px;
+}
+
+.add-to-collection button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.add-to-collection button:hover:not(:disabled) {
+  background-color: #feb47b;
+}
+
+
+@media (max-width: 768px) {
+  .single-art-content {
+    flex-direction: column;
+  }
+}

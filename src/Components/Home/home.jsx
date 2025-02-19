@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import ExhibitionView from "../CollectionManager";
+import ExhibitionView from "../Exhibitions/CollectionManager";
 
 const Home = () => {
   const [query, setQuery] = useState("");

@@ -1,4 +1,5 @@
-import { useState } from "react";
+import React, { useState } from "react";
+import "./Sort.css";
 
 const sortList = [
   { apiNama: { vna: "date", harvard: "century" }, name: "Date" },
@@ -11,7 +12,6 @@ const SortsDropdown = ({ onSelect }) => {
 
   const handleChange = (event) => {
     const selectedValue = event.target.value;
-    // Find the matching sort option by comparing JSON stringified apiNama objects
     const selectedSort = sortList.find(
       (sortOpt) => JSON.stringify(sortOpt.apiNama) === selectedValue
     );
@@ -20,9 +20,16 @@ const SortsDropdown = ({ onSelect }) => {
   };
 
   return (
-    <div>
-      <label>Select sort:</label>
-      <select value={selectedSortOpt} onChange={handleChange}>
+    <div className="dropdown-container">
+      <label className="dropdown-label" htmlFor="sorts-select">
+        Select Sort:
+      </label>
+      <select
+        id="sorts-select"
+        className="dropdown-select"
+        value={selectedSortOpt}
+        onChange={handleChange}
+      >
         <option value="">All</option>
         {sortList.map((sortOpt) => (
           <option

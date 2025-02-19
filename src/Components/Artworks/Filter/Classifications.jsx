@@ -1,4 +1,5 @@
-import { useState } from "react";
+import React, { useState } from "react";
+import './Classifications.css'
 
 const classifications = [
   { id: { harvardId: 26, vnaID: "THES48917" }, name: "Paintings" },
@@ -15,16 +16,30 @@ const ClassificationDropdown = ({ onSelect }) => {
   const [selectedClassification, setSelectedClassification] = useState("");
 
   const handleChange = (event) => {
-    const selectedId = event.target.value;
-    const selectedClass = classifications.find(cls => JSON.stringify(cls.id) === selectedId);
-    setSelectedClassification(selectedId);
-    onSelect(selectedClass ? selectedClass.id : null); 
+    const selectedValue = event.target.value;
+    setSelectedClassification(selectedValue);
+    
+    if (selectedValue === "any") {
+      onSelect(null);
+    } else {
+      const selectedClass = classifications.find(
+        (cls) => JSON.stringify(cls.id) === selectedValue
+      );
+      onSelect(selectedClass ? selectedClass.id : null);
+    }
   };
 
   return (
-    <div>
-      <label>Select Classification:</label>
-      <select value={selectedClassification} onChange={handleChange}>
+    <div className="dropdown-container">
+      <label className="dropdown-label" htmlFor="classification-select">
+        Select Classification:
+      </label>
+      <select
+        id="classification-select"
+        className="dropdown-select"
+        value={selectedClassification}
+        onChange={handleChange}
+      >
         <option value="any">All</option>
         {classifications.map((cls) => (
           <option key={JSON.stringify(cls.id)} value={JSON.stringify(cls.id)}>
