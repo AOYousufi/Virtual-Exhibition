@@ -1,7 +1,7 @@
 import {BrowserRouter as Router, Routes, Route} from "react-router-dom"
 
 import './App.css'
-import Home from "./Components/Home/Home"
+import Home from './Components//Home/home.jsx'
 import Artworks from "./Components/Artworks/Artworks"
 import SingleArt from "./Components/Artworks/Single Art/SingleArt"
 import CollectionManager from "./Components/Exhibitions/CollectionManager"
