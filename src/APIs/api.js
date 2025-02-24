@@ -135,24 +135,21 @@ const fetchArtById = (id) => {
   
 
 
-const getAllArtworks = async (query, page = 1, classification , technique ,sortOpt, sortOrder, minResults = 18) => {
+const getAllArtworks = async (query, page = 1, classification , technique ,sortOpt, sortOrder, minResults =20 ) => {
     let artworks = [];
     let currentPage = page;
 
     while (artworks.length < minResults) {
-        console.log(classification);
+        
 
         const [harvardData, vnaData] = await Promise.all([
             getHarvardArtWorks(query, currentPage, classification?.harvardId , technique?.harvardId , sortOpt?.harvard , sortOrder),
             getVnaArtworks(query, currentPage, classification?.vnaID , technique?.vnaID ,sortOpt?.vna, sortOrder)
         ]);
 
-       
-console.log(harvardData, "Harvard One");
-console.log(vnaData, "VNA DATA");
-console.log(sortOrder);
+      
         const newResults = [...harvardData, ...vnaData];
-        console.log(newResults);
+       
 
         if (newResults.length === 0) break;
         artworks = [...artworks, ...newResults];

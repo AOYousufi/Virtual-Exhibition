@@ -1,13 +1,13 @@
 import React from 'react';
 import { useCollections } from '../../Context/CollectionContext';
 import { useParams } from 'react-router-dom';
-import './ExhibitionView.css';
 import { Link } from 'react-router-dom';
+import './ExhibitionView.css';
+
 const ExhibitionView = () => {
   const { collections, removeItemFromCollection } = useCollections();
   const { id } = useParams();
-  const collectionId = id;
-  const collection = collections.find((col) => col.id === collectionId);
+  const collection = collections.find((col) => col.id === id);
 
   if (!collection) return <p className="exhibition-error">Collection not found.</p>;
 
@@ -20,10 +20,12 @@ const ExhibitionView = () => {
         <ul className="exhibition-items">
           {collection.items.map((item) => (
             <li key={item.id} className="exhibition-item">
-              <Link to={`/artworks/${item.id}`}><p className="exhibition-item-title">{item.title}</p></Link>
+              <Link to={`/artworks/${item.id}`}>
+                <p className="exhibition-item-title">{item.title}</p>
+              </Link>
               <button
                 className="exhibition-remove-btn"
-                onClick={() => removeItemFromCollection(collectionId, item.id)}
+                onClick={() => removeItemFromCollection(collection.id, item.id)}
               >
                 Remove
               </button>

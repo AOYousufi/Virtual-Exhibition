@@ -1,37 +1,45 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import ExhibitionView from "../Exhibitions/CollectionManager";
+import React from "react";
+import SearchBar from "../SearchBar/Searchbar";
+import "./Home.css";
 
 const Home = () => {
-  const [query, setQuery] = useState("");
-  const navigate = useNavigate();
-
-  const handleSearch = () => {
-    if (query.trim() !== "") {
-      navigate(`/artworks?q=${query}`); 
-    }
-  };
-
   return (
-    <div style={{ textAlign: "center", padding: "50px" }}>
-      <h1>Welcome to the Artwork Gallery</h1>
-      <p>Search for artworks from Harvard and V&A Museums</p>
-      <input
-        type="text"
-        placeholder="Enter artwork name..."
-        value={query}
-        onChange={(e) => setQuery(e.target.value)}
-        style={{
-          padding: "10px",
-          fontSize: "16px",
-          width: "300px",
-          marginRight: "10px",
-        }}
-      />
-      <button onClick={handleSearch} style={{ padding: "10px 15px", fontSize: "16px", cursor: "pointer" }}>
-        Search
-      </button>
-   
+    <div className="home-container">
+      <section className="hero-section">
+        <div className="hero-overlay"></div>
+        <div className="hero-content">
+          <h1 className="hero-title">Explore the Beauty of Art</h1>
+          <p className="hero-subtitle">
+            Immerse yourself in a vibrant world of paintings, sculptures, and artifacts.
+          </p>
+          <SearchBar />
+        </div>
+      </section>
+
+      <section className="features-section">
+        <div className="feature-card">
+          <h2>Discover</h2>
+          <p>Explore a vast collection of historical and modern artworks.</p>
+        </div>
+        <div className="feature-card">
+          <h2>Curate</h2>
+          <p>Create your own exhibitions and share them with the world.</p>
+        </div>
+        <div className="feature-card">
+          <h2>Experience</h2>
+          <p>Engage with interactive galleries and dynamic presentations.</p>
+        </div>
+      </section>
+
+      <section className="gallery-preview">
+        <h2 className="gallery-title">Featured Artworks</h2>
+        <div className="gallery-grid">
+          <div className="gallery-item"></div>
+          <div className="gallery-item"></div>
+          <div className="gallery-item"></div>
+          <div className="gallery-item"></div>
+        </div>
+      </section>
     </div>
   );
 };

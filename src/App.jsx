@@ -7,6 +7,7 @@ import SingleArt from "./Components/Artworks/Single Art/SingleArt"
 import CollectionManager from "./Components/Exhibitions/CollectionManager"
 import ExhibitionView from "./Components/Exhibitions/Individual Exhibiton/ExhibitonVIew"
 import Navbar from "./Components/Navbar/Navbar"
+import SearchBar from "./Components/SearchBar/Searchbar"
 
 function App() {
 
@@ -18,8 +19,8 @@ function App() {
         <Route path="/" element={<Home/>} />
         <Route path="/artworks" element={<Artworks/>} />
         <Route path="/artworks/:id" element={<SingleArt/>}/>
-        <Route path="/exhibitons" element={<CollectionManager/>}/>
-        <Route path="/exhibitons/:id" element={<ExhibitionView/>}/>
+        <Route path="/exhibitions" element={<CollectionManager/>}/>
+        <Route path="/exhibitions/:id" element={<ExhibitionView/>}/>
       </Routes>
     </Router>
   )

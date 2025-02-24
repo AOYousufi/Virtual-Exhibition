@@ -10,15 +10,18 @@ export const CollectionsProvider = ({ children }) => {
     const saved = localStorage.getItem('collections');
     return saved ? JSON.parse(saved) : [];
   });
-  
-  console.log(collections);
 
-  
   useEffect(() => {
     localStorage.setItem('collections', JSON.stringify(collections));
   }, [collections]);
 
+  // ✅ Prevent duplicate collection names
   const addCollection = (name) => {
+    const nameExists = collections.some(col => col.name.toLowerCase() === name.toLowerCase());
+    if (nameExists) {
+      alert("A collection with this name already exists!");
+      return;
+    }
     const newCollection = {
       id: Date.now().toString(),
       name,
@@ -31,13 +34,20 @@ export const CollectionsProvider = ({ children }) => {
     setCollections((prev) => prev.filter(col => col.id !== collectionId));
   };
 
+  // ✅ Prevent duplicate artworks in the same collection
   const addItemToCollection = (collectionId, item) => {
     setCollections((prev) =>
-      prev.map(col =>
-        col.id === collectionId
-          ? { ...col, items: [...col.items, item] }
-          : col
-      )
+      prev.map(col => {
+        if (col.id === collectionId) {
+          const itemExists = col.items.some(existingItem => existingItem.id === item.id);
+          if (itemExists) {
+            alert("This artwork is already in the collection!");
+            return col; 
+          }
+          return { ...col, items: [...col.items, item] };
+        }
+        return col;
+      })
     );
   };
 
