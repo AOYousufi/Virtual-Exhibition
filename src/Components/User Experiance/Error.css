@@ -1,0 +1,11 @@
+.error-notification {
+  background-color: #ffe6e6;
+  color: #cc0000;
+  border: 1px solid #cc0000;
+  border-radius: 5px;
+  padding: 15px;
+  margin: 20px auto;
+  max-width: 600px;
+  text-align: left;
+  font-family: Arial, sans-serif;
+}

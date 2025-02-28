@@ -1,23 +1,39 @@
-/* ✅ Main Container */
 .single-art-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
   padding: 20px;
 }
 
+/* Wrapper for side-by-side layout */
+.single-art-content-wrapper {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
 
+/* Hero Section and Image */
 .single-art-hero {
+  flex: 1;
+  max-width: 600px;
+  cursor: pointer;
+}
+
+.single-art-image {
   width: 100%;
-  max-width: 800px;
-  text-align: center;
+  height: 500px;
+  overflow: hidden;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .single-art-image img {
-  width: 100%;
-  height: auto;
+  max-width: 100%;
+  max-height: 100%;
   object-fit: contain;
-  border-radius: 8px;
   transition: transform 0.3s ease-in-out;
 }
 
@@ -25,30 +41,33 @@
   transform: scale(1.05);
 }
 
+/* Details Section */
+.single-art-details-wrapper {
+  flex: 1;
+  max-width: 600px;
+}
 
 .single-art-content {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  max-width: 700px;
-  margin-top: 20px;
+  align-items: flex-start;
+  color: #444;
 }
 
 .single-art-title {
   font-size: 2rem;
   font-weight: bold;
-  text-align: center;
   margin-bottom: 15px;
+  color: #222;
 }
 
-.single-art-details {
+.single-art-content p {
   font-size: 1rem;
-  color: #444;
   line-height: 1.6;
-  text-align: center;
+  margin: 5px 0;
 }
 
-
+/* Add to Collection Button */
 .add-to-collection-btn {
   background-color: #ff7e5f;
   color: white;
@@ -65,54 +84,120 @@
   background-color: #feb47b;
 }
 
-
+/* Collection Panel */
 .collection-panel {
   position: fixed;
   top: 0;
   right: 0;
   width: 300px;
+  max-width: 90%;
   height: 100vh;
-  background: white;
+  background: #fff;
   box-shadow: -5px 0 15px rgba(0, 0, 0, 0.2);
   padding: 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
+  z-index: 1000;
 }
 
-.collection-panel h2 {
+.collection-panel-header {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.collection-panel-header h2 {
   font-size: 1.5rem;
-  margin-bottom: 15px;
+  margin: 0;
+  color: #333;
 }
 
-.collection-panel .close-panel {
-  position: absolute;
-  top: 15px;
-  right: 15px;
-  border: none;
+.close-panel {
   background: none;
+  border: none;
   font-size: 1.5rem;
   cursor: pointer;
 }
 
+.collection-list {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
 
-.confirmation-toast {
+.collection-list button {
+  width: 100%;
+  padding: 8px 12px;
+  font-size: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background-color: #f5f5f5;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.collection-list button:hover {
+  background-color: #e0e0e0;
+}
+
+.no-collections {
+  text-align: center;
+}
+
+.create-collection-btn {
+  padding: 8px 12px;
+  font-size: 1rem;
+  border: none;
+  border-radius: 4px;
+  background-color: #ff7e5f;
+  color: #fff;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: background-color 0.3s ease;
+}
+
+.create-collection-btn:hover {
+  background-color: #feb47b;
+}
+
+.collection-info {
+  margin-top: 15px;
+  font-size: 0.9rem;
+  color: #666;
+}
+
+/* Message Toast */
+.message-toast {
   position: fixed;
   bottom: 30px;
   right: 30px;
-  background-color: #4CAF50;
-  color: white;
   padding: 12px 20px;
   border-radius: 8px;
   font-size: 1rem;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-  animation: fadeInOut 3s ease-in-out;
+  z-index: 1100;
 }
 
+.message-toast.success {
+  background-color: #4caf50;
+  color: white;
+}
 
-@keyframes fadeInOut {
-  0% { opacity: 0; transform: translateY(10px); }
-  10% { opacity: 1; transform: translateY(0); }
-  90% { opacity: 1; transform: translateY(0); }
-  100% { opacity: 0; transform: translateY(10px); }
+.message-toast.error {
+  background-color: #f44336;
+  color: white;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .single-art-content-wrapper {
+    flex-direction: column;
+  }
+  .collection-panel {
+    width: 90%;
+  }
 }

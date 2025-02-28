@@ -3,6 +3,17 @@ import { fetchArtById } from "../../../APIs/api";
 import { useState, useEffect } from "react";
 import { useCollections } from "../../Context/CollectionContext";
 import { motion } from "framer-motion";
+import {
+  Box,
+  Typography,
+  Button,
+  CircularProgress,
+  Alert,
+  Dialog,
+  DialogContent,
+  IconButton,
+} from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
 import "./singleArt.css";
 
 const SingleArt = () => {
@@ -11,9 +22,11 @@ const SingleArt = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
   const [collectionPanelOpen, setCollectionPanelOpen] = useState(false);
-  const [showConfirmation, setShowConfirmation] = useState(false); // ✅ State for confirmation
+  const [showMessage, setShowMessage] = useState("");
+  const [messageType, setMessageType] = useState(""); // "success" or "error"
+  const [lightboxOpen, setLightboxOpen] = useState(false);
   const { collections, addItemToCollection } = useCollections();
-console.log(artDetails);
+
   useEffect(() => {
     setIsLoading(true);
     fetchArtById(id)
@@ -28,97 +41,184 @@ console.log(artDetails);
       });
   }, [id]);
 
-  if (isLoading) return <p className="loading">Loading...</p>;
-  if (error) return <p className="error">Error: {error}</p>;
-  if (!artDetails) return <p className="no-art">No artwork found.</p>;
-
-  
   const handleAddToCollection = (collectionId) => {
-    const collection = collections.find(col => col.id === collectionId);
+    const collection = collections.find((col) => col.id === collectionId);
     if (!collection) return;
-  
-    const itemExists = collection.items.some(item => item.id === artDetails.id);
+    const itemExists = collection.items.some(
+      (item) => item.id === artDetails.id
+    );
     if (itemExists) {
-      setShowConfirmation(false);
-      alert("This artwork is already in the collection!");
+      setShowMessage("This artwork is already in the collection!");
+      setMessageType("error");
+      setTimeout(() => {
+        setShowMessage("");
+        setMessageType("");
+      }, 3000);
       return;
     }
-  
     addItemToCollection(collectionId, artDetails);
-    setShowConfirmation(true);
-    setTimeout(() => setShowConfirmation(false), 3000);
+    setShowMessage("Artwork added to collection!");
+    setMessageType("success");
+    setTimeout(() => {
+      setShowMessage("");
+      setMessageType("");
+    }, 3000);
   };
+
+  if (isLoading)
+    return (
+      <Box className="loading">
+        <CircularProgress />
+      </Box>
+    );
+  if (error)
+    return (
+      <Box className="error">
+        <Alert severity="error">{error}</Alert>
+      </Box>
+    );
+  if (!artDetails)
+    return (
+      <Box className="no-art">
+        <Alert severity="info">No artwork found.</Alert>
+      </Box>
+    );
 
   return (
     <section className="single-art-container">
-      {/* ✅ Hero Section */}
-      <motion.div 
-        className="single-art-hero"
-        initial={{ opacity: 0 }} 
-        animate={{ opacity: 1 }} 
-        transition={{ duration: 0.5 }}
-      >
-        {artDetails.image && (
-          <div className="single-art-image">
-            <img src={artDetails.image} alt={artDetails.title} />
+      <div className="single-art-content-wrapper">
+        <motion.div
+          className="single-art-hero"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5 }}
+        >
+          {artDetails.image && (
+            <div
+              className="single-art-image"
+              onClick={() => setLightboxOpen(true)}
+              style={{ cursor: "pointer" }}
+            >
+              <img src={artDetails.image} alt={artDetails.title} />
+            </div>
+          )}
+        </motion.div>
+        <div className="single-art-details-wrapper">
+          <div className="single-art-content">
+            <h1 className="single-art-title">{artDetails.title}</h1>
+            {artDetails.artist && (
+              <p>
+                <strong>Artist:</strong> {artDetails.artist}
+              </p>
+            )}
+            {artDetails.date && (
+              <p>
+                <strong>Date:</strong> {artDetails.date}
+              </p>
+            )}
+            {artDetails.medium && (
+              <p>
+                <strong>Medium:</strong> {artDetails.medium}
+              </p>
+            )}
+            {artDetails.dimensions && (
+              <p>
+                <strong>Dimensions:</strong> {artDetails.dimensions}
+              </p>
+            )}
+            {artDetails.location && (
+              <p>
+                <strong>Location:</strong> {artDetails.location}
+              </p>
+            )}
+            <Button
+              variant="contained"
+              className="add-to-collection-btn"
+              onClick={() => setCollectionPanelOpen(true)}
+            >
+              + Add to Collection
+            </Button>
           </div>
-        )}
-      </motion.div>
-
-
-      <div className="single-art-content">
-        <div className="single-art-details">
-          <h1 className="single-art-title">{artDetails.title}</h1>
-          {artDetails.artist && <p><strong>Artist:</strong> {artDetails.artist}</p>}
-          {artDetails.date && <p><strong>Date:</strong> {artDetails.date}</p>}
-          {artDetails.medium && <p><strong>Medium:</strong> {artDetails.medium}</p>}
-          {artDetails.dimensions && <p><strong>Dimensions:</strong> {artDetails.dimensions}</p>}
-          {artDetails.location && <p><strong>Location:</strong> {artDetails.location}</p>}
-
-
-          <motion.button
-            className="add-to-collection-btn"
-            whileHover={{ scale: 1.1 }}
-            onClick={() => setCollectionPanelOpen(true)}
-          >
-            + Add to Collection
-          </motion.button>
         </div>
       </div>
 
-     
       {collectionPanelOpen && (
-        <motion.div
-          className="collection-panel"
-          initial={{ x: "100%" }}
-          animate={{ x: 0 }}
-          transition={{ duration: 0.4 }}
-        >
-          <h2>Select Collection</h2>
-          <button className="close-panel" onClick={() => setCollectionPanelOpen(false)}>✖</button>
-          <div className="collection-list">
-            {collections.map((col) => (
-              <button key={col.id} onClick={() => handleAddToCollection(col.id)}>
-                {col.name}
-              </button>
-            ))}
+        <div className="collection-panel">
+          <div className="collection-panel-header">
+            <h2>Select Collection</h2>
+            <button
+              className="close-panel"
+              onClick={() => setCollectionPanelOpen(false)}
+            >
+              ✖
+            </button>
           </div>
-          <p className="collection-info">You can add this artwork to multiple collections.</p>
-        </motion.div>
+          <div className="collection-list">
+            {collections.length > 0 ? (
+              collections.map((col) => (
+                <button
+                  key={col.id}
+                  onClick={() => handleAddToCollection(col.id)}
+                >
+                  {col.name}
+                </button>
+              ))
+            ) : (
+              <div className="no-collections">
+                <p>No collections found.</p>
+                <button
+                  className="create-collection-btn"
+                  onClick={() => {
+                    /* TODO: open create modal */
+                  }}
+                >
+                  Create New Collection
+                </button>
+              </div>
+            )}
+          </div>
+          <p className="collection-info">
+            You can add this artwork to multiple collections.
+          </p>
+        </div>
       )}
 
-
-      {showConfirmation && (
-        <motion.div 
-          className="confirmation-toast"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.3 }}
-          exit={{ opacity: 0, y: 20 }}
-        >
-          ✅ Artwork added to collection!
-        </motion.div>
+      {showMessage && (
+        <div className={`message-toast ${messageType}`}>{showMessage}</div>
       )}
+
+      {/* Lightbox Dialog for Enlarged Image */}
+      <Dialog
+        open={lightboxOpen}
+        onClose={() => setLightboxOpen(false)}
+        maxWidth="lg"
+        PaperProps={{
+          style: { backgroundColor: "transparent", boxShadow: "none" },
+        }}
+      >
+        <DialogContent sx={{ p: 0 }}>
+          <Box sx={{ position: "relative" }}>
+            <IconButton
+              onClick={() => setLightboxOpen(false)}
+              sx={{
+                position: "absolute",
+                top: 10,
+                right: 10,
+                color: "white",
+                backgroundColor: "rgba(0,0,0,0.5)",
+                "&:hover": { backgroundColor: "rgba(0,0,0,0.7)" },
+              }}
+            >
+              <CloseIcon />
+            </IconButton>
+            <img
+              src={artDetails.image}
+              alt={artDetails.title}
+              style={{ width: "100%", height: "auto", display: "block" }}
+            />
+          </Box>
+        </DialogContent>
+      </Dialog>
     </section>
   );
 };

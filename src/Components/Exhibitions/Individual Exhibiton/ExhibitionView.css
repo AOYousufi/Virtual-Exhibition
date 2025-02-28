@@ -1,64 +1,76 @@
 .exhibition-view-container {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 20px;
-    font-family: 'Helvetica Neue', sans-serif;
-    color: #333;
-  }
-  
-  .exhibition-title {
-    text-align: center;
-    font-size: 2rem;
-    margin-bottom: 20px;
-    color: #222;
-  }
-  
-  .exhibition-empty {
-    text-align: center;
-    font-size: 1.2rem;
-    color: #666;
-  }
-  
-  .exhibition-items {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
-  
-  .exhibition-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px;
-    border-bottom: 1px solid #ddd;
-  }
-  
-  .exhibition-item:last-child {
-    border-bottom: none;
-  }
-  
-  .exhibition-item-title {
-    font-size: 1.1rem;
-    margin: 0;
-  }
-  
-  .exhibition-remove-btn {
-    padding: 5px 10px;
-    background-color: #ff7e5f;
-    color: #fff;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  
-  .exhibition-remove-btn:hover {
-    background-color: #feb47b;
-  }
-  
-  .exhibition-error {
-    text-align: center;
-    font-size: 1.2rem;
-    color: red;
-  }
-  
+  max-width: 800px;
+  margin: 20px auto;
+  padding: 30px 20px;
+  background: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  font-family: "Helvetica Neue", sans-serif;
+  color: #333;
+}
+
+.exhibition-title {
+  text-align: center;
+  font-size: 2.2rem;
+  margin-bottom: 20px;
+  color: #222;
+}
+
+.exhibition-empty {
+  text-align: center;
+  font-size: 1.2rem;
+  color: #666;
+}
+
+.exhibition-items {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.exhibition-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  padding: 10px 15px;
+  margin-bottom: 10px;
+  transition: background 0.3s ease;
+}
+
+.exhibition-item:hover {
+  background: #f1f1f1;
+}
+
+.exhibition-item-link {
+  text-decoration: none;
+  color: inherit;
+  flex-grow: 1;
+}
+
+.exhibition-item-title {
+  font-size: 1.1rem;
+  margin: 0;
+}
+
+.exhibition-remove-btn {
+  padding: 6px 12px;
+  background-color: #ff7e5f;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.exhibition-remove-btn:hover {
+  background-color: #feb47b;
+}
+
+.exhibition-error {
+  text-align: center;
+  font-size: 1.2rem;
+  color: red;
+}
