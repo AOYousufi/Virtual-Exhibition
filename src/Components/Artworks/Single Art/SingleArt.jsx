@@ -7,11 +7,13 @@ import {
   Box,
   Typography,
   Button,
-  CircularProgress,
   Alert,
   Dialog,
   DialogContent,
   IconButton,
+  Skeleton,
+  TextField,
+  Snackbar,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import "./singleArt.css";
@@ -22,21 +24,36 @@ const SingleArt = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
   const [collectionPanelOpen, setCollectionPanelOpen] = useState(false);
-  const [showMessage, setShowMessage] = useState("");
-  const [messageType, setMessageType] = useState(""); // "success" or "error"
   const [lightboxOpen, setLightboxOpen] = useState(false);
-  const { collections, addItemToCollection } = useCollections();
+
+  // For creating a new collection from this panel
+  const [newCollectionName, setNewCollectionName] = useState("");
+  const [createCollectionError, setCreateCollectionError] = useState("");
+
+  // Snackbar state for confirmation messages
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: "",
+    severity: "success", // "success" or "error"
+  });
+
+  const { collections, addItemToCollection, addCollection } = useCollections();
 
   useEffect(() => {
     setIsLoading(true);
+    setError("");
     fetchArtById(id)
       .then((response) => {
-        setArtDetails(response);
+        if (!response || Object.keys(response).length === 0) {
+          setError("No artwork found for this ID.");
+        } else {
+          setArtDetails(response);
+        }
         setIsLoading(false);
       })
       .catch((err) => {
         console.error(err);
-        setError("Failed to load artwork details");
+        setError("Failed to load artwork details.");
         setIsLoading(false);
       });
   }, [id]);
@@ -48,38 +65,112 @@ const SingleArt = () => {
       (item) => item.id === artDetails.id
     );
     if (itemExists) {
-      setShowMessage("This artwork is already in the collection!");
-      setMessageType("error");
-      setTimeout(() => {
-        setShowMessage("");
-        setMessageType("");
-      }, 3000);
+      setSnackbar({
+        open: true,
+        message: "This artwork is already in the collection!",
+        severity: "error",
+      });
       return;
     }
     addItemToCollection(collectionId, artDetails);
-    setShowMessage("Artwork added to collection!");
-    setMessageType("success");
-    setTimeout(() => {
-      setShowMessage("");
-      setMessageType("");
-    }, 3000);
+    setSnackbar({
+      open: true,
+      message: "Artwork added to collection!",
+      severity: "success",
+    });
   };
 
+  const handleCreateCollection = () => {
+    const nameTrimmed = newCollectionName.trim();
+    if (!nameTrimmed) {
+      setCreateCollectionError("Collection name cannot be empty.");
+      return;
+    }
+    // Check for duplicate name
+    const existing = collections.find(
+      (col) => col.name.toLowerCase() === nameTrimmed.toLowerCase()
+    );
+    if (existing) {
+      setCreateCollectionError("A collection with that name already exists.");
+      return;
+    }
+    addCollection(nameTrimmed);
+    setNewCollectionName("");
+    setCreateCollectionError("");
+    setSnackbar({
+      open: true,
+      message: "New collection created!",
+      severity: "success",
+    });
+  };
+
+  const handleCloseSnackbar = () => {
+    setSnackbar({ ...snackbar, open: false });
+  };
+
+  // Loading state with Skeletons
   if (isLoading)
     return (
-      <Box className="loading">
-        <CircularProgress />
+      <Box className="single-art-container">
+        <div className="single-art-content-wrapper">
+          <motion.div className="single-art-hero">
+            <Skeleton
+              variant="rectangular"
+              width="100%"
+              height={500}
+              animation="wave"
+            />
+          </motion.div>
+          <div className="single-art-details-wrapper">
+            <Skeleton variant="text" width="80%" height={40} animation="wave" />
+            <Skeleton variant="text" width="60%" height={30} animation="wave" />
+            <Skeleton variant="text" width="70%" height={30} animation="wave" />
+            <Skeleton variant="text" width="50%" height={30} animation="wave" />
+            <Skeleton variant="text" width="90%" height={30} animation="wave" />
+            <Skeleton
+              variant="rectangular"
+              width={200}
+              height={40}
+              animation="wave"
+              sx={{ mt: 2 }}
+            />
+          </div>
+        </div>
       </Box>
     );
+
+  // Error state
   if (error)
     return (
-      <Box className="error">
-        <Alert severity="error">{error}</Alert>
+      <Box
+        className="single-art-container"
+        sx={{
+          minHeight: "50vh",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <Alert
+          severity="error"
+          variant="filled"
+          sx={{
+            fontSize: "1.2rem",
+            p: 3,
+            width: "80%",
+            maxWidth: "600px",
+            textAlign: "center",
+          }}
+        >
+          {error}
+        </Alert>
       </Box>
     );
+
+  // No art found state
   if (!artDetails)
     return (
-      <Box className="no-art">
+      <Box className="single-art-container">
         <Alert severity="info">No artwork found.</Alert>
       </Box>
     );
@@ -135,6 +226,10 @@ const SingleArt = () => {
               variant="contained"
               className="add-to-collection-btn"
               onClick={() => setCollectionPanelOpen(true)}
+              sx={{
+                backgroundColor: "#ff7e5f",
+                "&:hover": { backgroundColor: "#feb47b" },
+              }}
             >
               + Add to Collection
             </Button>
@@ -153,6 +248,8 @@ const SingleArt = () => {
               ✖
             </button>
           </div>
+
+          {/* Existing Collections */}
           <div className="collection-list">
             {collections.length > 0 ? (
               collections.map((col) => (
@@ -166,25 +263,70 @@ const SingleArt = () => {
             ) : (
               <div className="no-collections">
                 <p>No collections found.</p>
-                <button
-                  className="create-collection-btn"
-                  onClick={() => {
-                    /* TODO: open create modal */
-                  }}
-                >
-                  Create New Collection
-                </button>
               </div>
             )}
           </div>
+
+          {/* Create New Collection Section */}
+          <Box sx={{ width: "100%", mt: 3 }}>
+            <Typography
+              variant="subtitle1"
+              sx={{ fontWeight: "bold", mb: 1, textAlign: "center" }}
+            >
+              Create a New Collection
+            </Typography>
+            <Box sx={{ display: "flex", gap: 1 }}>
+              <TextField
+                label="Collection Name"
+                variant="outlined"
+                size="small"
+                value={newCollectionName}
+                onChange={(e) => setNewCollectionName(e.target.value)}
+                sx={{ flex: 1 }}
+              />
+              <Button
+                variant="contained"
+                onClick={handleCreateCollection}
+                sx={{
+                  backgroundColor: "#ff7e5f",
+                  "&:hover": { backgroundColor: "#feb47b" },
+                }}
+              >
+                Create
+              </Button>
+            </Box>
+            {createCollectionError && (
+              <Typography
+                variant="body2"
+                color="error"
+                sx={{ mt: 1, textAlign: "center" }}
+              >
+                {createCollectionError}
+              </Typography>
+            )}
+          </Box>
+
           <p className="collection-info">
             You can add this artwork to multiple collections.
           </p>
         </div>
       )}
 
-      {showMessage && (
-        <div className={`message-toast ${messageType}`}>{showMessage}</div>
+      {snackbar.open && (
+        <Snackbar
+          open={snackbar.open}
+          autoHideDuration={3000}
+          onClose={handleCloseSnackbar}
+          anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+        >
+          <Alert
+            onClose={handleCloseSnackbar}
+            severity={snackbar.severity}
+            sx={{ width: "100%" }}
+          >
+            {snackbar.message}
+          </Alert>
+        </Snackbar>
       )}
 
       {/* Lightbox Dialog for Enlarged Image */}

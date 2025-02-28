@@ -3,22 +3,61 @@ import { motion } from "framer-motion";
 import { useCollections } from "../Context/CollectionContext";
 import { Link } from "react-router-dom";
 import Tooltip from "@mui/material/Tooltip";
-import Zoom from "@mui/material/Zoom";
+import Snackbar from "@mui/material/Snackbar";
+import Alert from "@mui/material/Alert";
 import "./CollectionManager.css";
 
 const CollectionManager = () => {
   const { collections, addCollection, removeCollection } = useCollections();
   const [newCollectionName, setNewCollectionName] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: "",
+    severity: "success", // "success" or "error"
+  });
 
   const handleAdd = () => {
-    if (!newCollectionName.trim()) {
-      setErrorMessage("Collection name cannot be empty.");
+    const nameTrimmed = newCollectionName.trim();
+    if (!nameTrimmed) {
+      setSnackbar({
+        open: true,
+        message: "Collection name cannot be empty.",
+        severity: "error",
+      });
       return;
     }
-    addCollection(newCollectionName.trim());
+    // Check for duplicate name
+    const existing = collections.find(
+      (col) => col.name.toLowerCase() === nameTrimmed.toLowerCase()
+    );
+    if (existing) {
+      setSnackbar({
+        open: true,
+        message: "A collection with that name already exists.",
+        severity: "error",
+      });
+      return;
+    }
+    addCollection(nameTrimmed);
     setNewCollectionName("");
-    setErrorMessage("");
+    setSnackbar({
+      open: true,
+      message: "New collection added successfully!",
+      severity: "success",
+    });
+  };
+
+  const handleRemove = (collectionId, collectionName) => {
+    removeCollection(collectionId);
+    setSnackbar({
+      open: true,
+      message: `Collection "${collectionName}" removed successfully!`,
+      severity: "success",
+    });
+  };
+
+  const handleCloseSnackbar = () => {
+    setSnackbar({ ...snackbar, open: false });
   };
 
   return (
@@ -56,18 +95,6 @@ const CollectionManager = () => {
           </button>
         </div>
 
-        {errorMessage && (
-          <motion.p
-            className="error-message"
-            role="alert"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.4 }}
-          >
-            {errorMessage}
-          </motion.p>
-        )}
-
         <motion.ul
           className="collection-manager-list"
           initial="hidden"
@@ -102,7 +129,7 @@ const CollectionManager = () => {
                 </Link>
               </Tooltip>
               <button
-                onClick={() => removeCollection(collection.id)}
+                onClick={() => handleRemove(collection.id, collection.name)}
                 className="collection-manager-remove-btn"
                 aria-label={`Remove ${collection.name} collection`}
               >
@@ -112,6 +139,21 @@ const CollectionManager = () => {
           ))}
         </motion.ul>
       </div>
+
+      <Snackbar
+        open={snackbar.open}
+        autoHideDuration={3000}
+        onClose={handleCloseSnackbar}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+      >
+        <Alert
+          onClose={handleCloseSnackbar}
+          severity={snackbar.severity}
+          sx={{ width: "100%" }}
+        >
+          {snackbar.message}
+        </Alert>
+      </Snackbar>
     </motion.div>
   );
 };

@@ -1,16 +1,36 @@
-import React from "react";
+import React, { useState } from "react";
 import { useCollections } from "../../Context/CollectionContext";
 import { useParams, Link } from "react-router-dom";
 import { motion } from "framer-motion";
+import { Box, Typography, Button, Snackbar, Alert } from "@mui/material";
+import SentimentDissatisfiedIcon from "@mui/icons-material/SentimentDissatisfied";
 import "./ExhibitionView.css";
 
 const ExhibitionView = () => {
   const { collections, removeItemFromCollection } = useCollections();
   const { id } = useParams();
   const collection = collections.find((col) => col.id === id);
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: "",
+    severity: "success",
+  });
 
   if (!collection)
     return <p className="exhibition-error">Collection not found.</p>;
+
+  const handleRemove = (itemId, itemTitle) => {
+    removeItemFromCollection(collection.id, itemId);
+    setSnackbar({
+      open: true,
+      message: `"${itemTitle}" removed from collection!`,
+      severity: "success",
+    });
+  };
+
+  const handleCloseSnackbar = () => {
+    setSnackbar({ ...snackbar, open: false });
+  };
 
   return (
     <motion.div
@@ -19,9 +39,19 @@ const ExhibitionView = () => {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6 }}
     >
-      <h1 className="exhibition-title">{collection.name}</h1>
+      <Typography variant="h4" className="exhibition-title">
+        {collection.name}
+      </Typography>
       {collection.items.length === 0 ? (
-        <p className="exhibition-empty">No artworks added yet.</p>
+        <Box className="exhibition-empty-state">
+          <SentimentDissatisfiedIcon sx={{ fontSize: 80, color: "#ccc" }} />
+          <Typography variant="h6" sx={{ mt: 2, color: "#777" }}>
+            No artworks added yet.
+          </Typography>
+          <Typography variant="body1" sx={{ mt: 1, color: "#999" }}>
+            Browse artworks and add them to this collection.
+          </Typography>
+        </Box>
       ) : (
         <motion.ul
           className="exhibition-items"
@@ -45,19 +75,44 @@ const ExhibitionView = () => {
                 to={`/artworks/${item.id}`}
                 className="exhibition-item-link"
               >
-                <p className="exhibition-item-title">{item.title}</p>
+                <Typography
+                  variant="subtitle1"
+                  className="exhibition-item-title"
+                >
+                  {item.title}
+                </Typography>
               </Link>
-              <button
+              <Button
+                onClick={() => handleRemove(item.id, item.title)}
+                variant="contained"
+                sx={{
+                  backgroundColor: "#ff7e5f",
+                  "&:hover": { backgroundColor: "#feb47b" },
+                }}
                 className="exhibition-remove-btn"
-                onClick={() => removeItemFromCollection(collection.id, item.id)}
                 aria-label={`Remove ${item.title} from collection`}
               >
                 Remove
-              </button>
+              </Button>
             </motion.li>
           ))}
         </motion.ul>
       )}
+
+      <Snackbar
+        open={snackbar.open}
+        autoHideDuration={3000}
+        onClose={handleCloseSnackbar}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+      >
+        <Alert
+          onClose={handleCloseSnackbar}
+          severity={snackbar.severity}
+          sx={{ width: "100%" }}
+        >
+          {snackbar.message}
+        </Alert>
+      </Snackbar>
     </motion.div>
   );
 };
