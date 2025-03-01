@@ -49,7 +49,7 @@ const fetchArtById = (id) => {
       if (err.response && err.response.status) {
         throw {
           status: err.response.status,
-          message: err.response.data.error || "Error fetching artwork details",
+          message: err.response.data.error || "Errorr fetching artwork details",
         };
       }
       throw { status: 500, message: "Error fetching artwork details" };
