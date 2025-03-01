@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const backendApi = axios.create({
-  baseURL: "https://se-exhibiton-be.onrender.com/api",
+  baseURL: "https://se-exhibiton-be-dawn-grass-6783.fly.dev/api",
 });
 
 const getAllArtworks = (
