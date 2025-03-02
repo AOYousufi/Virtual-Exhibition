@@ -36,7 +36,11 @@ The **Virtual Exhibiton** allows researchers, students, and art enthusiasts to:
 🖼 **Curated Exhibitions**
 
 ---
+## 🚀 Hosted Version & Backend
 
+- **Hosted Version:** [[View Live]](https://mueseumexhibition.netlify.app/)
+- **Backend:** [Backend Repository](https://github.com/Sultan0013/SE-Exhibiton-BE)
+---
 ## 🛠 Tech Stack
 
 - **Front-End Framework:** [![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)](https://reactjs.org/)
