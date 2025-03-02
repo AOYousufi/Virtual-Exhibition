@@ -7,6 +7,22 @@
   text-align: center;
 }
 
+.results-header {
+  display: inline-block;
+  background: linear-gradient(135deg, #ff7e5f, #feb47b);
+  color: #fff;
+  padding: 10px 20px;
+  margin-bottom: 15px;
+  border-radius: 8px;
+  animation: fadeIn 1s ease-in-out;
+}
+
+.results-text {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
 .artworks-title {
   font-size: 1.8rem;
   margin-bottom: 15px;
@@ -68,7 +84,6 @@
   justify-content: center;
 }
 
-/* ✅ Individual Masonry Column */
 .masonry-column {
   padding-left: 10px;
   background-clip: padding-box;
@@ -78,7 +93,6 @@
   margin-bottom: 10px;
 }
 
-/* ✅ Pagination - Compact */
 .pagination {
   display: flex;
   justify-content: center;
@@ -87,7 +101,6 @@
   margin-top: 15px;
 }
 
-/* ✅ Pagination Buttons */
 .pagination button {
   padding: 8px 15px;
   font-size: 0.9rem;
@@ -108,7 +121,6 @@
   background-color: #feb47b;
 }
 
-/* ✅ Responsive Adjustments */
 @media (max-width: 768px) {
   .filters-container {
     flex-direction: column;
@@ -144,5 +156,16 @@
   .pagination {
     flex-direction: column;
     gap: 5px;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }

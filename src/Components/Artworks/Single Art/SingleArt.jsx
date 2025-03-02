@@ -267,7 +267,6 @@ const SingleArt = () => {
             )}
           </div>
 
-          {/* Create New Collection Section */}
           <Box sx={{ width: "100%", mt: 3 }}>
             <Typography
               variant="subtitle1"
@@ -329,7 +328,6 @@ const SingleArt = () => {
         </Snackbar>
       )}
 
-      {/* Lightbox Dialog for Enlarged Image */}
       <Dialog
         open={lightboxOpen}
         onClose={() => setLightboxOpen(false)}

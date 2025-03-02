@@ -35,7 +35,7 @@ const Artworks = () => {
     if (!query) return;
     setLoading(true);
     setError(null);
-    // Clear previous artworks when a new search begins
+
     setArtworks([]);
     console.log("Fetching artworks with:", {
       query,
@@ -52,7 +52,7 @@ const Artworks = () => {
         setHasNextPage(data.hasNextPage);
       })
       .catch((err) => {
-        setArtworks([]); // Clear any previous results
+        setArtworks([]);
         setError(err);
       })
       .finally(() => setLoading(false));
@@ -67,14 +67,16 @@ const Artworks = () => {
 
   return (
     <div className="artworks-container">
-      <motion.h2
-        className="artworks-title"
-        initial={{ opacity: 0, y: shouldReduceMotion ? 0 : -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={shouldReduceMotion ? {} : { duration: 0.5 }}
-      >
-        Showing results for: "{query}"
-      </motion.h2>
+      {query && (
+        <motion.div
+          className="results-header"
+          initial={{ opacity: 0, y: shouldReduceMotion ? 0 : -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={shouldReduceMotion ? {} : { duration: 0.5 }}
+        >
+          <h2 className="results-text">Showing results for: "{query}"</h2>
+        </motion.div>
+      )}
       <SearchBar />
       <motion.div
         className="filters-container"

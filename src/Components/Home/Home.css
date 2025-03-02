@@ -11,7 +11,6 @@ body {
   background: #f5f5f5;
 }
 
-/* Hero Section */
 .hero-section {
   height: 90vh;
   background: url("https://framemark.vam.ac.uk/collections/2017KC2290/full/full/0/default.jpg")
@@ -82,7 +81,6 @@ body {
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
 }
 
-/* Gallery Preview */
 .gallery-preview {
   text-align: center;
   margin: 50px auto;
@@ -115,13 +113,13 @@ body {
   background-image: url("https://ids.lib.harvard.edu/ids/view/17387934");
 }
 .gallery-item:nth-child(2) {
-  background-image: url("https://ids.lib.harvard.edu/ids/view/17387934");
+  background-image: url("https://ids.lib.harvard.edu/ids/view/408713861");
 }
 .gallery-item:nth-child(3) {
-  background-image: url("https://ids.lib.harvard.edu/ids/view/17387934");
+  background-image: url("https://framemark.vam.ac.uk/collections/2009BX6694/full/full/0/default.jpg");
 }
 .gallery-item:nth-child(4) {
-  background-image: url("https://ids.lib.harvard.edu/ids/view/17387934");
+  background-image: url("https://ids.lib.harvard.edu/ids/view/469446528");
 }
 
 .gallery-item:hover {
@@ -129,7 +127,6 @@ body {
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
 }
 
-/* Keyframes */
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -141,7 +138,6 @@ body {
   }
 }
 
-/* Media Queries */
 @media (max-width: 1024px) {
   .hero-title {
     font-size: 2.5rem;

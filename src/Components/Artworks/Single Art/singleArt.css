@@ -1,8 +1,7 @@
 .single-art-container {
-  padding: 20px;
+  padding: 50px;
 }
 
-/* Wrapper for side-by-side layout */
 .single-art-content-wrapper {
   display: flex;
   flex-direction: row;
@@ -13,7 +12,6 @@
   margin: 0 auto;
 }
 
-/* Hero Section and Image */
 .single-art-hero {
   flex: 1;
   max-width: 600px;
@@ -67,7 +65,6 @@
   margin: 5px 0;
 }
 
-/* Add to Collection Button */
 .add-to-collection-btn {
   background-color: #ff7e5f;
   color: white;
@@ -84,7 +81,6 @@
   background-color: #feb47b;
 }
 
-/* Collection Panel */
 .collection-panel {
   position: fixed;
   top: 0;

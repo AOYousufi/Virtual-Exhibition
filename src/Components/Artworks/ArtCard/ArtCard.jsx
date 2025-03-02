@@ -6,7 +6,6 @@ import "./ArtCard.css";
 const ArtCard = ({ art }) => {
   const { collections } = useCollections();
 
-  // Determine the image URL based on available data
   const imageUrl = art.contact?.includes("harvard.edu")
     ? art.primaryimageurl
     : art._currentLocation?.id?.startsWith("TH")

@@ -13,7 +13,7 @@ const CollectionManager = () => {
   const [snackbar, setSnackbar] = useState({
     open: false,
     message: "",
-    severity: "success", // "success" or "error"
+    severity: "success",
   });
 
   const handleAdd = () => {
@@ -26,7 +26,7 @@ const CollectionManager = () => {
       });
       return;
     }
-    // Check for duplicate name
+
     const existing = collections.find(
       (col) => col.name.toLowerCase() === nameTrimmed.toLowerCase()
     );
