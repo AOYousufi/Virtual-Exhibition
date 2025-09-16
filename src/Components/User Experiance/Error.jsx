@@ -26,7 +26,7 @@ const ErrorNotification = ({ error }) => {
     <div className="error-notification" role="alert">
       <h2>Oops! Something went wrong.</h2>
       <p>{userFriendlyMessage}</p>
-      <p>Please try again or contact support if the issue continues.</p>
+      <p>Please try again</p>
     </div>
   );
 };
