@@ -1,71 +1,72 @@
-# Virtual Exhibition - Front-End
+# Virtual Exhibition — Frontend
 
-Welcome to the **Exhibition Curation Platform** front-end repository! This project is a modern, responsive web application that allows users to explore virtual exhibitions and curated collections of art and antiquities. It integrates multiple museum/university APIs and connects to a back-end service for extended functionalities such as saving curated exhibitions and managing user accounts.
+A web app for exploring and curating virtual art exhibitions. Search and browse artworks across multiple museum collections, filter and sort through large datasets, and build your own curated exhibitions.
 
----
-
-## 📜 Table of Contents
-
-- [Project Overview](#project-overview)
-- [🚀 Features](#features)
-- [🛠 Tech Stack](#tech-stack)
-- [💻 Installation & Setup](#installation--setup)
-- [🎨 Acknowledgments](#acknowledgments)
+Integrates the **Harvard Art Museums API** and **Victoria & Albert Museum API**, connected to a custom backend for user accounts and saved exhibitions.
 
 ---
 
-## 🎨 Project Overview
+## 🔗 Links
 
-The **Virtual Exhibiton** allows researchers, students, and art enthusiasts to:
-
-✅ Search artworks across collections from multiple museum and university APIs.  
-✅ Browse artworks using a paginated list view (with “Previous” and “Next” navigation) for optimal performance.  
-✅ Filter and sort artworks to simplify navigation through large datasets.  
-✅ View detailed information (images, descriptions, metadata) for each artwork.  
-✅ Curate exhibitions by adding or removing items from temporary collections.  
-✅ Manage exhibitions with options to view and modify curated collections.
+- **Live Site:** [mueseumexhibition.netlify.app](https://mueseumexhibition.netlify.app/)
+- **Backend Repo:** [github.com/Sultan0013/SE-Exhibiton-BE](https://github.com/Sultan0013/SE-Exhibiton-BE)
 
 ---
 
-## 🚀 Features
-
-🔗 **Multi-API Integration**
-📱 **Responsive UI**  
-📚 **Advanced Navigation**
-🎭 **Dynamic Filtering/Sorting**
-🖼 **Curated Exhibitions**
-
----
-## 🚀 Hosted Version & Backend
-
-- **Hosted Version:** [[View Live]](https://mueseumexhibition.netlify.app/)
-- **Backend:** [Backend Repository](https://github.com/Sultan0013/SE-Exhibiton-BE)
----
 ## 🛠 Tech Stack
 
-- **Front-End Framework:** [![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)](https://reactjs.org/)
-- **Language:** [![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)](https://www.javascript.com/)
-- **Styling:** [![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white)](https://developer.mozilla.org/en-US/docs/Web/CSS) , [![Material UI](https://img.shields.io/badge/MUI-0081CB?style=for-the-badge&logo=material-ui&logoColor=white)](https://mui.com/)
-- **State Management:** React Context API (🔄)
-- **Routing:** [![React Router](https://img.shields.io/badge/React_Router-CA4245?style=for-the-badge&logo=react-router&logoColor=white)](https://reactrouter.com/)
-- **API Requests:** [![Axios](https://img.shields.io/badge/Axios-5A29E4?style=for-the-badge&logo=axios&logoColor=white)](https://axios-http.com/)
+| Layer | Technology |
+|---|---|
+| Framework | React |
+| Language | JavaScript |
+| Styling | CSS3 + Material UI |
+| State | React Context API |
+| Routing | React Router |
+| HTTP Client | Axios |
+| Hosting | Netlify |
 
 ---
 
-## 💻 Installation & Setup
+## ✨ Features
+
+- **Multi-API search** — query artworks across Harvard Art Museums and V&A simultaneously
+- **Paginated browsing** — Previous/Next navigation handles large datasets without performance hits
+- **Filter & sort** — narrow results by medium, date, culture, or collection
+- **Artwork detail view** — images, descriptions, and full metadata per item
+- **Exhibition curation** — build temporary collections by adding and removing items
+- **User accounts** — save and manage your curated exhibitions via the backend
+
+---
+
+## ⚙️ Local Setup
 
 ```bash
-# Clone the Repository
-git clone https://github.com/Sultan0013/Virtual-Exhibiton
-cd Virtual-Exhibition
+# Clone the repo
+git clone https://github.com/Sultan0013/Virtual-Exhibiton.git
+cd Virtual-Exhibiton
 
-# Install Dependencies
+# Install dependencies
 npm install
 
-# Start the Development Server
+# Start the development server
 npm run dev
 ```
 
-## 🎨 Acknowledgments
+Then open [http://localhost:5173](http://localhost:5173) in your browser.
 
-Special thanks to the Harvard Museum and the Victoria and Albert Museum APIs that power this platform. Their extensive and high-quality data make it possible for art enthusiasts, researchers, and students to explore and appreciate the world of art. We appreciate their commitment to sharing cultural heritage and academic resources with the public.
+---
+
+## Requirements
+
+- Node.js `v18+`
+
+---
+
+## Data Sources
+
+- [Harvard Art Museums API](https://harvardartmuseums.org/collections/api)
+- [Victoria and Albert Museum API](https://www.vam.ac.uk/api)
+
+---
+
+*Built as a group project during the Northcoders Digital Skills Bootcamp in Software Engineering.*
