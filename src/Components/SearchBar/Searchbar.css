@@ -19,26 +19,26 @@
 
 .search-input:focus {
   outline: none;
-  border-color: #ff7e5f;
-  box-shadow: 0 0 10px rgba(255, 126, 95, 0.7);
+  border-color: #7d2f1f;
+  box-shadow: 0 0 10px rgba(125, 47, 31, 0.35);
 }
 
 .search-button {
   padding: 14px 24px;
   font-size: 18px;
-  background: linear-gradient(135deg, #ff7e5f, #feb47b);
+  background: linear-gradient(135deg, #7d2f1f, #a4472e);
   color: #fff;
   border: none;
   border-radius: 8px;
   cursor: pointer;
-  transition: background 0.3s ease, transform 0.2s ease;
+  transition: background 0.2s ease;
 }
 
 .search-button:focus {
-  outline: none;
-  box-shadow: 0 0 10px rgba(255, 126, 95, 0.7);
+  outline: 3px solid rgba(125, 47, 31, 0.25);
+  outline-offset: 2px;
 }
 
 .search-button:hover {
-  background: linear-gradient(135deg, #feb47b, #ff7e5f);
+  background: linear-gradient(135deg, #a4472e, #7d2f1f);
 }
