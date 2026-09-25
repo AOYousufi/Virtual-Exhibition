@@ -61,7 +61,7 @@
 }
 
 .add-to-collection-btn {
-  background-color: #ff7e5f;
+  background-color: #94351f;
   color: white;
   font-size: 1rem;
   padding: 10px 15px;
@@ -73,7 +73,7 @@
 }
 
 .add-to-collection-btn:hover {
-  background-color: #feb47b;
+  background-color: #742819;
 }
 
 .collection-panel {
@@ -144,7 +144,7 @@
   font-size: 1rem;
   border: none;
   border-radius: 4px;
-  background-color: #ff7e5f;
+  background-color: #94351f;
   color: #fff;
   cursor: pointer;
   margin-top: 10px;
@@ -152,13 +152,13 @@
 }
 
 .create-collection-btn:hover {
-  background-color: #feb47b;
+  background-color: #742819;
 }
 
 .collection-info {
   margin-top: 15px;
   font-size: 0.9rem;
-  color: #666;
+  color: #555;
 }
 
 /* Message Toast */
@@ -230,4 +230,9 @@
   .single-art-title {
     font-size: 1.6rem;
   }
+}
+
+.single-art-image:focus-visible {
+  outline: 3px solid #7d2f1f;
+  outline-offset: 4px;
 }
