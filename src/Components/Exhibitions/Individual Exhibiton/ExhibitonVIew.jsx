@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useCollections } from "../../Context/CollectionContext";
-import { useParams, Link } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Box, Typography, Button, Snackbar, Alert } from "@mui/material";
 import SentimentDissatisfiedIcon from "@mui/icons-material/SentimentDissatisfied";
