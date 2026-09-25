@@ -104,12 +104,12 @@
 .pagination button {
   padding: 8px 15px;
   font-size: 0.9rem;
-  background-color: #ff7e5f;
+  background-color: #94351f;
   color: #fff;
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  transition: background 0.3s ease;
+  transition: background 0.2s ease;
 }
 
 .pagination button:disabled {
