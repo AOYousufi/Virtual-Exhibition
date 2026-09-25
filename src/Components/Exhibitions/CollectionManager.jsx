@@ -77,6 +77,11 @@ const CollectionManager = () => {
           Your Exhibition Collections
         </motion.h1>
 
+        <div className="storage-notice collection-storage-notice" role="note">
+          Collections are stored locally in this browser. They are not attached to
+          an account, and clearing browser storage may remove them.
+        </div>
+
         <div className="collection-manager-form">
           <input
             type="text"
@@ -115,7 +120,6 @@ const CollectionManager = () => {
                 hidden: { opacity: 0, y: 10 },
                 visible: { opacity: 1, y: 0 },
               }}
-              whileHover={{ scale: 1.02 }}
             >
               <Tooltip
                 title={`Number of artworks: ${collection.items.length}`}
@@ -144,12 +148,12 @@ const CollectionManager = () => {
         open={snackbar.open}
         autoHideDuration={3000}
         onClose={handleCloseSnackbar}
-        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
       >
         <Alert
           onClose={handleCloseSnackbar}
           severity={snackbar.severity}
-          sx={{ width: "100%" }}
+          sx={{ width: "100%", mt: 8 }}
         >
           {snackbar.message}
         </Alert>
