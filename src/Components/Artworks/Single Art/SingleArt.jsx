@@ -22,6 +22,11 @@ const SingleArt = () => {
   const { id } = useParams();
   const location = useLocation();
   const backTo = location.state?.from || "/artworks";
+  const backLabel = backTo.startsWith("/artworks")
+    ? "search results"
+    : backTo.startsWith("/exhibitions")
+    ? "exhibition"
+    : "artworks";
   const [artDetails, setArtDetails] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
@@ -181,7 +186,7 @@ const SingleArt = () => {
     <section className="single-art-container">
       <div className="single-art-navigation">
         <Link to={backTo} className="back-to-results">
-          ← Back to {location.state?.from ? "search results" : "artworks"}
+          ← Back to {backLabel}
         </Link>
       </div>
       <div className="single-art-content-wrapper">
