@@ -7,3 +7,23 @@
 .content {
   flex: 1;
 }
+
+.not-found-page {
+  min-height: 60vh;
+  display: grid;
+  place-content: center;
+  gap: 12px;
+  text-align: center;
+  padding: 40px 20px;
+}
+
+.not-found-page h1 {
+  font-size: clamp(3rem, 12vw, 7rem);
+  line-height: 1;
+  color: #7d2f1f;
+}
+
+.not-found-page a {
+  color: #7d2f1f;
+  font-weight: 700;
+}
