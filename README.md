@@ -1,19 +1,15 @@
-# Virtual Exhibition — Frontend
+# Virtual Exhibition
 
-A web app for exploring and curating virtual art exhibitions. Search and browse artworks across multiple museum collections, filter and sort through large datasets, and build your own curated exhibitions.
+A web app for exploring and curating virtual art exhibitions. Users can search artwork across multiple museum collections, filter and sort results, view artwork details and build their own exhibitions.
 
-Integrates the **Harvard Art Museums API** and **Victoria & Albert Museum API**, connected to a custom backend for user accounts and saved exhibitions.
+This was built collaboratively during the Northcoders Full-Stack Software Development bootcamp.
 
----
+## Links
 
-## 🔗 Links
+- **Live site:** [mueseumexhibition.netlify.app](https://mueseumexhibition.netlify.app/)
+- **Backend repo:** [github.com/AOYousufi/SE-Exhibiton-BE](https://github.com/AOYousufi/SE-Exhibiton-BE)
 
-- **Live Site:** [mueseumexhibition.netlify.app](https://mueseumexhibition.netlify.app/)
-- **Backend Repo:** [github.com/Sultan0013/SE-Exhibiton-BE](https://github.com/Sultan0013/SE-Exhibiton-BE)
-
----
-
-## 🛠 Tech Stack
+## Tech stack
 
 | Layer | Technology |
 |---|---|
@@ -22,51 +18,36 @@ Integrates the **Harvard Art Museums API** and **Victoria & Albert Museum API**,
 | Styling | CSS3 + Material UI |
 | State | React Context API |
 | Routing | React Router |
-| HTTP Client | Axios |
+| HTTP client | Axios |
 | Hosting | Netlify |
 
----
+## Features
 
-## ✨ Features
+- Search across the Harvard Art Museums and V&A APIs
+- Paginated browsing for large result sets
+- Filter and sort artwork by different properties
+- Detailed artwork views with images and metadata
+- Build temporary curated exhibitions
+- User accounts and saved exhibitions through the project backend
 
-- **Multi-API search** — query artworks across Harvard Art Museums and V&A simultaneously
-- **Paginated browsing** — Previous/Next navigation handles large datasets without performance hits
-- **Filter & sort** — narrow results by medium, date, culture, or collection
-- **Artwork detail view** — images, descriptions, and full metadata per item
-- **Exhibition curation** — build temporary collections by adding and removing items
-- **User accounts** — save and manage your curated exhibitions via the backend
-
----
-
-## ⚙️ Local Setup
+## Local setup
 
 ```bash
-# Clone the repo
-git clone https://github.com/Sultan0013/Virtual-Exhibiton.git
-cd Virtual-Exhibiton
-
-# Install dependencies
+git clone https://github.com/AOYousufi/Virtual-Exhibition.git
+cd Virtual-Exhibition
 npm install
-
-# Start the development server
 npm run dev
 ```
 
-Then open [http://localhost:5173](http://localhost:5173) in your browser.
+Then open [http://localhost:5173](http://localhost:5173).
 
----
-
-## Requirements
-
-- Node.js `v18+`
-
----
-
-## Data Sources
+## Data sources
 
 - [Harvard Art Museums API](https://harvardartmuseums.org/collections/api)
 - [Victoria and Albert Museum API](https://www.vam.ac.uk/api)
 
----
+## Requirements
 
-*Built as a group project during the Northcoders Digital Skills Bootcamp in Software Engineering.*
+- Node.js v18+
+
+Built as a group project during the Northcoders Full-Stack Software Development bootcamp.
