@@ -37,16 +37,11 @@ const SearchBar = React.memo(() => {
         onChange={(e) => setQuery(e.target.value)}
         onKeyDown={handleKeyDown}
         aria-label="Search for artworks"
-        whileFocus={{
-          scale: 1.02,
-          boxShadow: "0px 0px 10px rgba(255,126,95,0.7)",
-        }}
+        whileFocus={{ boxShadow: "0px 0px 0px 3px rgba(125,47,31,0.22)" }}
       />
       <motion.button
         className="search-button"
         onClick={handleSearch}
-        whileHover={{ scale: 1.05 }}
-        whileTap={{ scale: 0.95 }}
         aria-label="Search"
       >
         Search
