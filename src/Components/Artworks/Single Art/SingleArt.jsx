@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { Link, useLocation, useParams } from "react-router-dom";
 import { fetchArtById } from "../../../APIs/api";
 import { useState, useEffect } from "react";
 import { useCollections } from "../../Context/CollectionContext";
@@ -20,6 +20,8 @@ import "./singleArt.css";
 
 const SingleArt = () => {
   const { id } = useParams();
+  const location = useLocation();
+  const backTo = location.state?.from || "/artworks";
   const [artDetails, setArtDetails] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
@@ -177,6 +179,11 @@ const SingleArt = () => {
 
   return (
     <section className="single-art-container">
+      <div className="single-art-navigation">
+        <Link to={backTo} className="back-to-results">
+          ← Back to {location.state?.from ? "search results" : "artworks"}
+        </Link>
+      </div>
       <div className="single-art-content-wrapper">
         <motion.div
           className="single-art-hero"
@@ -190,7 +197,7 @@ const SingleArt = () => {
               onClick={() => setLightboxOpen(true)}
               style={{ cursor: "pointer" }}
             >
-              <img src={artDetails.image} alt={artDetails.title} />
+              <img src={artDetails.image} alt={artDetails.title || "Artwork detail"} />
             </div>
           )}
         </motion.div>
@@ -308,6 +315,10 @@ const SingleArt = () => {
           <p className="collection-info">
             You can add this artwork to multiple collections.
           </p>
+          <p className="storage-notice" role="note">
+            Your exhibition collections are saved in this browser using local storage.
+            They stay on this device/browser and are not linked to an account.
+          </p>
         </div>
       )}
 
@@ -316,12 +327,12 @@ const SingleArt = () => {
           open={snackbar.open}
           autoHideDuration={3000}
           onClose={handleCloseSnackbar}
-          anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+          anchorOrigin={{ vertical: "top", horizontal: "center" }}
         >
           <Alert
             onClose={handleCloseSnackbar}
             severity={snackbar.severity}
-            sx={{ width: "100%" }}
+            sx={{ width: "100%", mt: 8 }}
           >
             {snackbar.message}
           </Alert>
