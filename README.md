@@ -46,6 +46,21 @@ Then open [http://localhost:5173](http://localhost:5173).
 - [Harvard Art Museums API](https://harvardartmuseums.org/collections/api)
 - [Victoria and Albert Museum API](https://www.vam.ac.uk/api)
 
+## Accessibility & UX improvements
+
+Following technical review feedback, the project was improved with:
+
+- clearer keyboard and screen-reader labels
+- more purposeful hover states and reduced decorative motion
+- improved colour contrast
+- single-column artwork cards on small screens
+- URL-based pagination so refreshes keep the current results page
+- a back-to-results link from artwork details
+- more visible collection notifications
+- consistent artwork cards inside saved exhibitions
+- a clear notice explaining local browser storage
+- a client-side 404 route
+
 ## Requirements
 
 - Node.js v18+
