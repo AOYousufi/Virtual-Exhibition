@@ -12,7 +12,7 @@ const Navbar = () => {
         <div className="navbar-container">
           <div className="navbar-logo">
             <Link to="/">
-              <img src={logo} />
+              <img src={logo} alt="Virtual Exhibition home" />
             </Link>
           </div>
 
