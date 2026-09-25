@@ -4,6 +4,7 @@ import { useParams, Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Box, Typography, Button, Snackbar, Alert } from "@mui/material";
 import SentimentDissatisfiedIcon from "@mui/icons-material/SentimentDissatisfied";
+import ArtCard from "../../Artworks/ArtCard/ArtCard";
 import "./ExhibitionView.css";
 
 const ExhibitionView = () => {
@@ -53,17 +54,17 @@ const ExhibitionView = () => {
           </Typography>
         </Box>
       ) : (
-        <motion.ul
+        <motion.div
           className="exhibition-items"
           initial="hidden"
           animate="visible"
           variants={{
             hidden: { opacity: 0 },
-            visible: { opacity: 1, transition: { staggerChildren: 0.1 } },
+            visible: { opacity: 1, transition: { staggerChildren: 0.08 } },
           }}
         >
           {collection.items.map((item) => (
-            <motion.li
+            <motion.div
               key={item.id}
               className="exhibition-item"
               variants={{
@@ -71,44 +72,34 @@ const ExhibitionView = () => {
                 visible: { opacity: 1, y: 0 },
               }}
             >
-              <Link
-                to={`/artworks/${item.id}`}
-                className="exhibition-item-link"
-              >
-                <Typography
-                  variant="subtitle1"
-                  className="exhibition-item-title"
-                >
-                  {item.title}
-                </Typography>
-              </Link>
+              <ArtCard art={item} />
               <Button
                 onClick={() => handleRemove(item.id, item.title)}
                 variant="contained"
                 sx={{
-                  backgroundColor: "#ff7e5f",
-                  "&:hover": { backgroundColor: "#feb47b" },
+                  backgroundColor: "#94351f",
+                  "&:hover": { backgroundColor: "#742819" },
                 }}
                 className="exhibition-remove-btn"
                 aria-label={`Remove ${item.title} from collection`}
               >
                 Remove
               </Button>
-            </motion.li>
+            </motion.div>
           ))}
-        </motion.ul>
+        </motion.div>
       )}
 
       <Snackbar
         open={snackbar.open}
         autoHideDuration={3000}
         onClose={handleCloseSnackbar}
-        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
       >
         <Alert
           onClose={handleCloseSnackbar}
           severity={snackbar.severity}
-          sx={{ width: "100%" }}
+          sx={{ width: "100%", mt: 8 }}
         >
           {snackbar.message}
         </Alert>
