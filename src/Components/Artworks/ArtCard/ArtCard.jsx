@@ -1,10 +1,11 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useCollections } from "../../Context/CollectionContext";
 import "./ArtCard.css";
 
 const ArtCard = ({ art }) => {
   const { collections } = useCollections();
+  const location = useLocation();
 
   const imageUrl =
     art.image ||
@@ -36,6 +37,7 @@ const ArtCard = ({ art }) => {
     >
       <Link
         to={artLink}
+        state={{ from: location.pathname + location.search }}
         className="art-card-link"
         aria-label={`View details for ${art.title || "Artwork"}`}
       >
