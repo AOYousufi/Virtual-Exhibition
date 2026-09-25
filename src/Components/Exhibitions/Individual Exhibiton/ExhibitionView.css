@@ -23,54 +23,40 @@
 }
 
 .exhibition-items {
-  list-style: none;
-  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px;
   margin: 0;
 }
 
 .exhibition-item {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background: #fff;
-  border: 1px solid #e0e0e0;
-  border-radius: 6px;
-  padding: 10px 15px;
-  margin-bottom: 10px;
-  transition: background 0.3s ease;
+  min-width: 0;
 }
 
-.exhibition-item:hover {
-  background: #f1f1f1;
-}
-
-.exhibition-item-link {
-  text-decoration: none;
-  color: inherit;
-  flex-grow: 1;
-}
-
-.exhibition-item-title {
-  font-size: 1.1rem;
-  margin: 0;
+.exhibition-item .art-card {
+  height: auto;
 }
 
 .exhibition-remove-btn {
-  padding: 6px 12px;
-  background-color: #ff7e5f;
-  color: #fff;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.exhibition-remove-btn:hover {
-  background-color: #feb47b;
+  width: 100%;
+  margin-top: 10px !important;
 }
 
 .exhibition-error {
+  margin: 120px auto;
   text-align: center;
   font-size: 1.2rem;
-  color: red;
+  color: #9b1c1c;
+}
+
+@media (max-width: 700px) {
+  .exhibition-view-container {
+    margin: 80px 12px 40px;
+    padding: 28px 16px;
+  }
+
+  .exhibition-items {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
 }
