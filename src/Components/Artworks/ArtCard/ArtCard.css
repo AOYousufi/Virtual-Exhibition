@@ -5,7 +5,7 @@
   border-radius: 10px;
   background: #fff;
   overflow: hidden;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition: box-shadow 0.2s ease;
   cursor: pointer;
 }
 
@@ -25,12 +25,9 @@
   height: 100%;
   object-fit: cover;
   display: block;
-  transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+  transition: opacity 0.2s ease-in-out;
 }
 
-.art-card:hover .art-card-image {
-  transform: scale(1.05);
-}
 
 .art-card-content {
   padding: 15px;
@@ -81,4 +78,9 @@
   .art-card-description {
     font-size: 0.9rem;
   }
+}
+
+.art-card-link:focus-visible {
+  outline: 3px solid #222;
+  outline-offset: -3px;
 }
