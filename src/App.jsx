@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 
 import "./App.css";
 import Home from "./Components/Home/home.jsx";
@@ -21,6 +21,16 @@ function App() {
             <Route path="/artworks/:id" element={<SingleArt />} />
             <Route path="/exhibitions" element={<CollectionManager />} />
             <Route path="/exhibitions/:id" element={<ExhibitionView />} />
+            <Route
+              path="*"
+              element={
+                <section className="not-found-page">
+                  <h1>404</h1>
+                  <p>We couldn&apos;t find that page.</p>
+                  <Link to="/">Back to home</Link>
+                </section>
+              }
+            />
           </Routes>
         </main>
         <Footer />
