@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import Masonry from "react-masonry-css";
 import { motion, useReducedMotion } from "framer-motion";
 import { getAllArtworks } from "../../APIs/api";
@@ -15,21 +15,31 @@ import "./Artworks.css";
 import Skeleton from "@mui/material/Skeleton";
 
 const Artworks = () => {
-  const location = useLocation();
-  const searchParams = new URLSearchParams(location.search);
+  const [searchParams, setSearchParams] = useSearchParams();
   const query = searchParams.get("q");
+  const page = Math.max(Number.parseInt(searchParams.get("page") || "1", 10), 1);
 
   const [artworks, setArtworks] = useState([]);
   const [hasNextPage, setHasNextPage] = useState(true);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [page, setPage] = useState(1);
   const [classification, setClassification] = useState("");
   const [technique, setTechnique] = useState("");
   const [sortOpt, setSortOpt] = useState("");
   const [sortOrder, setSortOrder] = useState("asc");
 
   const shouldReduceMotion = useReducedMotion();
+
+  const changePage = (nextPage) => {
+    const nextParams = new URLSearchParams(searchParams);
+    if (nextPage <= 1) {
+      nextParams.delete("page");
+    } else {
+      nextParams.set("page", String(nextPage));
+    }
+    setSearchParams(nextParams);
+    window.scrollTo({ top: 0, behavior: shouldReduceMotion ? "auto" : "smooth" });
+  };
 
   useEffect(() => {
     if (!query) return;
@@ -62,7 +72,7 @@ const Artworks = () => {
     default: 4,
     1024: 3,
     768: 2,
-    480: 2,
+    480: 1,
   };
 
   return (
@@ -96,11 +106,7 @@ const Artworks = () => {
           columnClassName="masonry-column"
         >
           {Array.from(new Array(8)).map((_, index) => (
-            <motion.div
-              key={index}
-              whileHover={shouldReduceMotion ? {} : { scale: 1.05 }}
-              transition={shouldReduceMotion ? {} : { duration: 0.3 }}
-            >
+            <motion.div key={index}>
               <Skeleton
                 variant="rectangular"
                 width="100%"
@@ -122,18 +128,14 @@ const Artworks = () => {
         columnClassName="masonry-column"
       >
         {artworks?.map((art, index) => (
-          <motion.div
-            key={index}
-            whileHover={shouldReduceMotion ? {} : { scale: 1.05 }}
-            transition={shouldReduceMotion ? {} : { duration: 0.3 }}
-          >
+          <motion.div key={art.id || art.systemNumber || index}>
             <ArtCard art={art} />
           </motion.div>
         ))}
       </Masonry>
       <div className="pagination">
         <button
-          onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
+          onClick={() => changePage(Math.max(page - 1, 1))}
           disabled={page === 1}
           aria-label="Previous Page"
         >
@@ -141,7 +143,7 @@ const Artworks = () => {
         </button>
         <span>Page {page}</span>
         <button
-          onClick={() => setPage((prev) => prev + 1)}
+          onClick={() => changePage(page + 1)}
           disabled={!hasNextPage}
           aria-label="Next Page"
         >
