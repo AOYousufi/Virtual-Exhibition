@@ -200,6 +200,15 @@ const SingleArt = () => {
             <div
               className="single-art-image"
               onClick={() => setLightboxOpen(true)}
+              onKeyDown={(event) => {
+                if (event.key === "Enter" || event.key === " ") {
+                  event.preventDefault();
+                  setLightboxOpen(true);
+                }
+              }}
+              role="button"
+              tabIndex={0}
+              aria-label={`Open larger image of ${artDetails.title || "artwork"}`}
               style={{ cursor: "pointer" }}
             >
               <img src={artDetails.image} alt={artDetails.title || "Artwork detail"} />
@@ -239,8 +248,8 @@ const SingleArt = () => {
               className="add-to-collection-btn"
               onClick={() => setCollectionPanelOpen(true)}
               sx={{
-                backgroundColor: "#ff7e5f",
-                "&:hover": { backgroundColor: "#feb47b" },
+                backgroundColor: "#94351f",
+                "&:hover": { backgroundColor: "#742819" },
               }}
             >
               + Add to Collection
@@ -299,8 +308,8 @@ const SingleArt = () => {
                 variant="contained"
                 onClick={handleCreateCollection}
                 sx={{
-                  backgroundColor: "#ff7e5f",
-                  "&:hover": { backgroundColor: "#feb47b" },
+                  backgroundColor: "#94351f",
+                  "&:hover": { backgroundColor: "#742819" },
                 }}
               >
                 Create
@@ -356,6 +365,7 @@ const SingleArt = () => {
           <Box sx={{ position: "relative" }}>
             <IconButton
               onClick={() => setLightboxOpen(false)}
+              aria-label="Close enlarged artwork"
               sx={{
                 position: "absolute",
                 top: 10,
@@ -369,7 +379,7 @@ const SingleArt = () => {
             </IconButton>
             <img
               src={artDetails.image}
-              alt={artDetails.title}
+              alt={artDetails.title || "Enlarged artwork"}
               style={{ width: "100%", height: "auto", display: "block" }}
             />
           </Box>
