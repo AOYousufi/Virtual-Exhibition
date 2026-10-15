@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useCollections } from "../../Context/CollectionContext";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Box, Typography, Button, Snackbar, Alert } from "@mui/material";
 import SentimentDissatisfiedIcon from "@mui/icons-material/SentimentDissatisfied";
@@ -10,6 +10,8 @@ import "./ExhibitionView.css";
 const ExhibitionView = () => {
   const { collections, removeItemFromCollection } = useCollections();
   const { id } = useParams();
+  const [search, setSearch] = useState("");
+  const [sortMode, setSortMode] = useState("added");
   const collection = collections.find((col) => col.id === id);
   const [snackbar, setSnackbar] = useState({
     open: false,
@@ -19,6 +21,17 @@ const ExhibitionView = () => {
 
   if (!collection)
     return <p className="exhibition-error">Collection not found.</p>;
+
+  const searchTerm = search.trim().toLowerCase();
+  const visibleItems = collection.items
+    .filter((item) => String(item.title || item._primaryTitle || "").toLowerCase().includes(searchTerm))
+    .slice();
+  if (sortMode !== "added") {
+    visibleItems.sort((a, b) =>
+      String(a.title || a._primaryTitle || "").localeCompare(String(b.title || b._primaryTitle || "")) *
+      (sortMode === "az" ? 1 : -1)
+    );
+  }
 
   const handleRemove = (itemId, itemTitle) => {
     removeItemFromCollection(collection.id, itemId);
@@ -43,15 +56,42 @@ const ExhibitionView = () => {
       <Typography variant="h4" className="exhibition-title">
         {collection.name}
       </Typography>
+      <div className="exhibition-browse-controls">
+        <label>
+          Find an artwork
+          <input
+            type="search"
+            value={search}
+            onChange={(event) => setSearch(event.target.value)}
+            placeholder="Search saved artwork titles"
+          />
+        </label>
+        <label>
+          Order artworks
+          <select value={sortMode} onChange={(event) => setSortMode(event.target.value)}>
+            <option value="added">Curated order</option>
+            <option value="az">Title A–Z</option>
+            <option value="za">Title Z–A</option>
+          </select>
+        </label>
+      </div>
+      <p className="exhibition-count" role="status">
+        Showing {visibleItems.length} of {collection.items.length} artworks
+      </p>
+      {collection.items.length > 0 && visibleItems.length === 0 && (
+        <p role="status">No saved artworks match your search.</p>
+      )}
+
       {collection.items.length === 0 ? (
         <Box className="exhibition-empty-state">
           <SentimentDissatisfiedIcon sx={{ fontSize: 80, color: "#ccc" }} />
           <Typography variant="h6" sx={{ mt: 2, color: "#777" }}>
             No artworks added yet.
           </Typography>
-          <Typography variant="body1" sx={{ mt: 1, color: "#999" }}>
+          <Typography variant="body1" sx={{ mt: 1, color: "#777" }}>
             Browse artworks and add them to this collection.
           </Typography>
+          <Link to="/artworks">Explore artworks</Link>
         </Box>
       ) : (
         <motion.div
@@ -63,7 +103,7 @@ const ExhibitionView = () => {
             visible: { opacity: 1, transition: { staggerChildren: 0.08 } },
           }}
         >
-          {collection.items.map((item) => (
+          {visibleItems.map((item) => (
             <motion.div
               key={item.id}
               className="exhibition-item"
