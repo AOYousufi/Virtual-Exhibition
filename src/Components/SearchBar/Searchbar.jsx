@@ -1,52 +1,45 @@
-import React, { useState, useCallback } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import "./Searchbar.css";
 
 const SearchBar = React.memo(function SearchBar() {
-  const [query, setQuery] = useState("");
+  const location = useLocation();
   const navigate = useNavigate();
+  const [query, setQuery] = useState("");
 
-  const handleSearch = useCallback(() => {
-    if (query.trim() !== "") {
-      navigate(`/artworks?q=${encodeURIComponent(query)}`);
-    }
-  }, [query, navigate]);
+  useEffect(() => {
+    setQuery(new URLSearchParams(location.search).get("q") || "");
+  }, [location.search]);
 
-  const handleKeyDown = useCallback(
-    (e) => {
-      if (e.key === "Enter") {
-        handleSearch();
-      }
-    },
-    [handleSearch]
-  );
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    const term = query.trim();
+    if (term) navigate("/artworks?q=" + encodeURIComponent(term));
+  };
 
   return (
-    <motion.div
+    <motion.form
       className="search-bar-container"
+      onSubmit={handleSubmit}
+      role="search"
       initial={{ opacity: 0, y: -10 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5 }}
+      transition={{ duration: 0.3 }}
     >
       <motion.input
-        type="text"
+        type="search"
         className="search-input"
-        placeholder="Enter artwork name..."
+        placeholder="Search art, artists or materials..."
         value={query}
-        onChange={(e) => setQuery(e.target.value)}
-        onKeyDown={handleKeyDown}
+        onChange={(event) => setQuery(event.target.value)}
         aria-label="Search for artworks"
         whileFocus={{ boxShadow: "0px 0px 0px 3px rgba(125,47,31,0.22)" }}
       />
-      <motion.button
-        className="search-button"
-        onClick={handleSearch}
-        aria-label="Search"
-      >
+      <motion.button className="search-button" type="submit" aria-label="Search" disabled={!query.trim()}>
         Search
       </motion.button>
-    </motion.div>
+    </motion.form>
   );
 });
 
