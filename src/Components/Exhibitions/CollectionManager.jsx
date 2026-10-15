@@ -8,7 +8,7 @@ import Alert from "@mui/material/Alert";
 import "./CollectionManager.css";
 
 const CollectionManager = () => {
-  const { collections, addCollection, renameCollection, removeCollection } = useCollections();
+  const { collections, addCollection, renameCollection, restoreCollections, removeCollection } = useCollections();
   const [newCollectionName, setNewCollectionName] = useState("");
   const [editingId, setEditingId] = useState(null);
   const [editedName, setEditedName] = useState("");
@@ -66,6 +66,38 @@ const CollectionManager = () => {
     });
   };
 
+  const handleExport = () => {
+    const backup = JSON.stringify({ version: 1, collections }, null, 2);
+    const blob = new Blob([backup], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = "virtual-exhibitions-" + new Date().toISOString().slice(0, 10) + ".json";
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    URL.revokeObjectURL(url);
+    setSnackbar({ open: true, message: "Exhibitions exported to a JSON backup.", severity: "success" });
+  };
+
+  const handleImport = async (event) => {
+    const file = event.target.files?.[0];
+    event.target.value = "";
+    if (!file) return;
+    try {
+      if (file.size > 2_000_000) throw new Error("Backup file is too large (maximum 2 MB).");
+      const parsed = JSON.parse(await file.text());
+      if (!parsed || parsed.version !== 1 || !Array.isArray(parsed.collections)) {
+        throw new Error("This is not a Virtual Exhibition backup.");
+      }
+      if (!window.confirm("Replace your current exhibitions with this backup? Export them first if needed.")) return;
+      if (!restoreCollections(parsed)) throw new Error("Backup contains invalid collections or artwork.");
+      setSnackbar({ open: true, message: "Exhibition backup imported successfully.", severity: "success" });
+    } catch (error) {
+      setSnackbar({ open: true, message: error.message || "Could not import backup.", severity: "error" });
+    }
+  };
+
   const handleCloseSnackbar = () => {
     setSnackbar({ ...snackbar, open: false });
   };
@@ -90,6 +122,16 @@ const CollectionManager = () => {
         <div className="storage-notice collection-storage-notice" role="note">
           Collections are stored locally in this browser. They are not attached to
           an account, and clearing browser storage may remove them.
+        </div>
+
+        <div className="collection-backup-tools" aria-label="Backup exhibition collections">
+          <button type="button" onClick={handleExport} disabled={collections.length === 0}>
+            Export collections (.json)
+          </button>
+          <label className="collection-import-label">
+            Import backup
+            <input type="file" accept=".json,application/json" onChange={handleImport} />
+          </label>
         </div>
 
         <div className="collection-manager-form">

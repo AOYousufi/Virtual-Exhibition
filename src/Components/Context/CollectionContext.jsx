@@ -73,6 +73,31 @@ export const CollectionsProvider = ({ children }) => {
     return true;
   };
 
+  // Restores a user-selected local backup. Never accept arbitrary JSON as state.
+  const restoreCollections = (backup) => {
+    const entries = backup?.version === 1 ? backup.collections : null;
+    if (!Array.isArray(entries) || entries.length > 100) return false;
+    const seenNames = new Set();
+    const seenIds = new Set();
+    const valid = entries.every((col) => {
+      if (!isValidCollection(col) || !col.name.trim() || col.name.length > 100 ||
+          col.items.length > 500 || seenNames.has(col.name.toLowerCase()) || seenIds.has(col.id)) return false;
+      seenNames.add(col.name.toLowerCase());
+      seenIds.add(col.id);
+      const itemIds = new Set();
+      return col.items.every((item) => {
+        if (!item || typeof item !== "object" ||
+            (typeof item.id !== "string" && typeof item.id !== "number") ||
+            itemIds.has(String(item.id))) return false;
+        itemIds.add(String(item.id));
+        return true;
+      });
+    });
+    if (!valid) return false;
+    setCollections(entries);
+    return true;
+  };
+
   const removeCollection = (collectionId) => {
     setCollections((prev) => prev.filter((col) => col.id !== collectionId));
   };
@@ -100,7 +125,7 @@ export const CollectionsProvider = ({ children }) => {
 
   return (
     <CollectionsContext.Provider
-      value={{ collections, addCollection, renameCollection, removeCollection, addItemToCollection, removeItemFromCollection }}
+      value={{ collections, addCollection, renameCollection, restoreCollections, removeCollection, addItemToCollection, removeItemFromCollection }}
     >
       {children}
     </CollectionsContext.Provider>

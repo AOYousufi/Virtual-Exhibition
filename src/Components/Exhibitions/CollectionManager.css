@@ -183,3 +183,10 @@
 .collection-manager-rename-btn:hover, .collection-rename-form button:hover { background: #f3e8e2; }
 .collection-rename-form { display: flex; flex: 1; gap: 8px; flex-wrap: wrap; align-items: center; }
 .collection-rename-form input { flex: 1; min-width: 130px; padding: 8px; border: 1px solid #b4a39b; border-radius: 4px; }
+
+.collection-backup-tools { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 12px; margin: 0 0 22px; }
+.collection-backup-tools button, .collection-import-label { display: inline-block; border: 1px solid #94351f; background: #fff; color: #742819; font: inherit; padding: 9px 13px; border-radius: 6px; cursor: pointer; }
+.collection-backup-tools button:disabled { cursor: not-allowed; opacity: .55; }
+.collection-backup-tools button:not(:disabled):hover, .collection-import-label:hover { background: #f3e8e2; }
+.collection-import-label:focus-within { outline: 3px solid #94351f; outline-offset: 2px; }
+.collection-import-label input { position: absolute; width: 1px; height: 1px; opacity: 0; overflow: hidden; }
