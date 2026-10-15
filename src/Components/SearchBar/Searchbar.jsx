@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import "./Searchbar.css";
 
-const SearchBar = React.memo(() => {
+const SearchBar = React.memo(function SearchBar() {
   const [query, setQuery] = useState("");
   const navigate = useNavigate();
 
