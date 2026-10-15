@@ -98,7 +98,7 @@ const Artworks = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={shouldReduceMotion ? {} : { duration: 0.5 }}
         >
-          <h2 className="results-text">Showing results for: "{query}"</h2>
+          <h2 className="results-text">Showing results for: &quot;{query}&quot;</h2>
         </motion.div>
       )}
       <SearchBar />

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { useCollections } from "../Context/CollectionContext";
 import { Link } from "react-router-dom";
