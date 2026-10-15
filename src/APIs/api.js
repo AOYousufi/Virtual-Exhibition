@@ -1,59 +1,47 @@
 import axios from "axios";
 
+// Set VITE_API_BASE_URL during deployment to override the existing API host.
 const backendApi = axios.create({
-  baseURL: "https://se-exhibiton-be.onrender.com/api",
+  baseURL: import.meta.env.VITE_API_BASE_URL || "https://se-exhibiton-be.onrender.com/api",
+  timeout: 15000,
 });
 
-const getAllArtworks = (
+const getError = (error, fallback) => {
+  if (axios.isCancel(error)) return error;
+  const message = error.response?.data?.error || error.message || fallback;
+  const normalized = new Error(message);
+  normalized.status = error.response?.status || 0;
+  return normalized;
+};
+
+const getAllArtworks = async (
   query,
   page = 1,
   classification,
   technique,
   sortOpt,
-  sortOrder
+  sortOrder,
+  signal
 ) => {
-  return backendApi
-    .get("/all-artworks", {
+  try {
+    const { data } = await backendApi.get("/all-artworks", {
       params: { q: query, page, classification, technique, sortOpt, sortOrder },
-    })
-    .then(({ data }) => {
-      if (data.error) {
-        // Throw an error object with a status code and message
-        throw { status: data.status || 500, message: data.error };
-      }
-      return data;
-    })
-    .catch((err) => {
-      console.error("Error fetching artworks:", err);
-      if (err.response && err.response.status) {
-        throw {
-          status: err.response.status,
-          message: err.response.data.error || "Error fetching artworks",
-        };
-      }
-      throw { status: 500, message: "Error fetching artworks" };
+      signal,
     });
+    if (!Array.isArray(data?.artworks)) throw new Error("Invalid artwork search response");
+    return { artworks: data.artworks, hasNextPage: Boolean(data.hasNextPage) };
+  } catch (error) {
+    throw getError(error, "Failed to fetch artworks");
+  }
 };
 
-const fetchArtById = (id) => {
-  return backendApi
-    .get(`/artwork/${id}`)
-    .then(({ data }) => {
-      if (data.error) {
-        throw { status: data.status || 500, message: data.error };
-      }
-      return data;
-    })
-    .catch((err) => {
-      console.error("Error fetching artwork by ID:", err);
-      if (err.response && err.response.status) {
-        throw {
-          status: err.response.status,
-          message: err.response.data.error || "Errorr fetching artwork details",
-        };
-      }
-      throw { status: 500, message: "Error fetching artwork details" };
-    });
+const fetchArtById = async (id, signal) => {
+  try {
+    const { data } = await backendApi.get("/artwork/" + encodeURIComponent(id), { signal });
+    return data;
+  } catch (error) {
+    throw getError(error, "Failed to fetch artwork details");
+  }
 };
 
 export { getAllArtworks, fetchArtById };
