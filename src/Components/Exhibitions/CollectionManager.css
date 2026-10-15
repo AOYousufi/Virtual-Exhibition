@@ -177,3 +177,9 @@
     width: 100%;
   }
 }
+
+.collection-manager-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+.collection-manager-rename-btn, .collection-rename-form button { padding: 8px 10px; border: 1px solid #94351f; border-radius: 4px; color: #742819; background: #fff; cursor: pointer; }
+.collection-manager-rename-btn:hover, .collection-rename-form button:hover { background: #f3e8e2; }
+.collection-rename-form { display: flex; flex: 1; gap: 8px; flex-wrap: wrap; align-items: center; }
+.collection-rename-form input { flex: 1; min-width: 130px; padding: 8px; border: 1px solid #b4a39b; border-radius: 4px; }

@@ -8,8 +8,10 @@ import Alert from "@mui/material/Alert";
 import "./CollectionManager.css";
 
 const CollectionManager = () => {
-  const { collections, addCollection, removeCollection } = useCollections();
+  const { collections, addCollection, renameCollection, removeCollection } = useCollections();
   const [newCollectionName, setNewCollectionName] = useState("");
+  const [editingId, setEditingId] = useState(null);
+  const [editedName, setEditedName] = useState("");
   const [snackbar, setSnackbar] = useState({
     open: false,
     message: "",
@@ -47,7 +49,15 @@ const CollectionManager = () => {
     });
   };
 
+  const handleRename = (event, collectionId) => {
+    event.preventDefault();
+    const renamed = renameCollection(collectionId, editedName);
+    setSnackbar({ open: true, message: renamed ? "Exhibition renamed." : "Use a unique name between 1 and 100 characters.", severity: renamed ? "success" : "error" });
+    if (renamed) setEditingId(null);
+  };
+
   const handleRemove = (collectionId, collectionName) => {
+    if (!window.confirm(`Remove "${collectionName}" and all its saved artworks?`)) return;
     removeCollection(collectionId);
     setSnackbar({
       open: true,
@@ -121,24 +131,48 @@ const CollectionManager = () => {
                 visible: { opacity: 1, y: 0 },
               }}
             >
-              <Tooltip
-                title={`Number of artworks: ${collection.items.length}`}
-                arrow
-              >
-                <Link
-                  to={`/exhibitions/${collection.id}`}
-                  className="collection-manager-link"
-                >
-                  {collection.name}
-                </Link>
-              </Tooltip>
-              <button
-                onClick={() => handleRemove(collection.id, collection.name)}
-                className="collection-manager-remove-btn"
-                aria-label={`Remove ${collection.name} collection`}
-              >
-                Remove
-              </button>
+              {editingId === collection.id ? (
+                <form className="collection-rename-form" onSubmit={(event) => handleRename(event, collection.id)}>
+                  <input
+                    value={editedName}
+                    onChange={(event) => setEditedName(event.target.value)}
+                    maxLength={100}
+                    aria-label="Rename exhibition"
+                    autoFocus
+                  />
+                  <button type="submit">Save</button>
+                  <button type="button" onClick={() => setEditingId(null)}>Cancel</button>
+                </form>
+              ) : (
+                <>
+                  <Tooltip title={`Number of artworks: ${collection.items.length}`} arrow>
+                    <Link to={`/exhibitions/${collection.id}`} className="collection-manager-link">
+                      {collection.name} ({collection.items.length})
+                    </Link>
+                  </Tooltip>
+                  <div className="collection-manager-actions">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setEditingId(collection.id);
+                        setEditedName(collection.name);
+                      }}
+                      className="collection-manager-rename-btn"
+                      aria-label={`Rename ${collection.name}`}
+                    >
+                      Rename
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => handleRemove(collection.id, collection.name)}
+                      className="collection-manager-remove-btn"
+                      aria-label={`Remove ${collection.name} collection`}
+                    >
+                      Remove
+                    </button>
+                  </div>
+                </>
+              )}
             </motion.li>
           ))}
         </motion.ul>

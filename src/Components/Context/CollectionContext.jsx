@@ -60,6 +60,19 @@ export const CollectionsProvider = ({ children }) => {
     return id;
   };
 
+  const renameCollection = (collectionId, name) => {
+    const trimmed = typeof name === "string" ? name.trim() : "";
+    if (!trimmed || trimmed.length > 100) return false;
+    if (!collections.some((col) => col.id === collectionId)) return false;
+    if (collections.some((col) => col.id !== collectionId && col.name.toLowerCase() === trimmed.toLowerCase())) {
+      return false;
+    }
+    setCollections((prev) =>
+      prev.map((col) => col.id === collectionId ? { ...col, name: trimmed } : col)
+    );
+    return true;
+  };
+
   const removeCollection = (collectionId) => {
     setCollections((prev) => prev.filter((col) => col.id !== collectionId));
   };
@@ -87,7 +100,7 @@ export const CollectionsProvider = ({ children }) => {
 
   return (
     <CollectionsContext.Provider
-      value={{ collections, addCollection, removeCollection, addItemToCollection, removeItemFromCollection }}
+      value={{ collections, addCollection, renameCollection, removeCollection, addItemToCollection, removeItemFromCollection }}
     >
       {children}
     </CollectionsContext.Provider>
