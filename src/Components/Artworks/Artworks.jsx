@@ -16,11 +16,14 @@ import Skeleton from "@mui/material/Skeleton";
 
 const Artworks = () => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const query = searchParams.get("q");
-  const page = Math.max(Number.parseInt(searchParams.get("page") || "1", 10), 1);
+  const query = searchParams.get("q")?.trim() || "";
+  const requestedPage = Number(searchParams.get("page") || "1");
+  const page = Number.isSafeInteger(requestedPage) && requestedPage >= 1 && requestedPage <= 10000
+    ? requestedPage
+    : 1;
 
   const [artworks, setArtworks] = useState([]);
-  const [hasNextPage, setHasNextPage] = useState(true);
+  const [hasNextPage, setHasNextPage] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [classification, setClassification] = useState("");
@@ -41,31 +44,42 @@ const Artworks = () => {
     window.scrollTo({ top: 0, behavior: shouldReduceMotion ? "auto" : "smooth" });
   };
 
+  const changeFilter = (setter) => (value) => {
+    setter(value);
+    const nextParams = new URLSearchParams(searchParams);
+    nextParams.delete("page");
+    setSearchParams(nextParams);
+  };
+
   useEffect(() => {
-    if (!query) return;
+    if (!query) {
+      setArtworks([]);
+      setHasNextPage(false);
+      setError(null);
+      setLoading(false);
+      return;
+    }
+
+    const controller = new AbortController();
     setLoading(true);
     setError(null);
-
     setArtworks([]);
-    console.log("Fetching artworks with:", {
-      query,
-      page,
-      classification,
-      technique,
-      sortOpt,
-      sortOrder,
-    });
-    getAllArtworks(query, page, classification, technique, sortOpt, sortOrder)
+    getAllArtworks(query, page, classification, technique, sortOpt, sortOrder, controller.signal)
       .then((data) => {
-        console.log("Fetched artworks:", data);
+        if (controller.signal.aborted) return;
         setArtworks(data.artworks);
         setHasNextPage(data.hasNextPage);
       })
       .catch((err) => {
+        if (controller.signal.aborted) return;
         setArtworks([]);
+        setHasNextPage(false);
         setError(err);
       })
-      .finally(() => setLoading(false));
+      .finally(() => {
+        if (!controller.signal.aborted) setLoading(false);
+      });
+    return () => controller.abort();
   }, [query, page, classification, technique, sortOpt, sortOrder]);
 
   const masonryBreakpoints = {
@@ -84,7 +98,7 @@ const Artworks = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={shouldReduceMotion ? {} : { duration: 0.5 }}
         >
-          <h2 className="results-text">Showing results for: "{query}"</h2>
+          <h2 className="results-text">Showing results for: &quot;{query}&quot;</h2>
         </motion.div>
       )}
       <SearchBar />
@@ -94,10 +108,10 @@ const Artworks = () => {
         animate={{ opacity: 1 }}
         transition={shouldReduceMotion ? {} : { duration: 0.5 }}
       >
-        <ClassificationDropdown onSelect={setClassification} />
-        <TechniqueDropdown onSelect={setTechnique} />
-        <SortsDropdown onSelect={setSortOpt} />
-        <SortOrderDropdown onSelect={setSortOrder} />
+        <ClassificationDropdown onSelect={changeFilter(setClassification)} />
+        <TechniqueDropdown onSelect={changeFilter(setTechnique)} />
+        <SortsDropdown onSelect={changeFilter(setSortOpt)} />
+        <SortOrderDropdown onSelect={changeFilter(setSortOrder)} />
       </motion.div>
       {loading && (
         <Masonry
@@ -120,19 +134,21 @@ const Artworks = () => {
         </Masonry>
       )}
       {error && <ErrorNotification error={error} />}
-      {!loading && !error && artworks.length === 0 && <NoResultsFound />}
+      {!loading && !error && query && artworks.length === 0 && <NoResultsFound />}
+      {!query && <p>Search for an artwork or artist to explore museum collections.</p>}
 
       <Masonry
         breakpointCols={masonryBreakpoints}
         className="masonry-grid"
         columnClassName="masonry-column"
       >
-        {artworks?.map((art, index) => (
+        {!loading && artworks.map((art, index) => (
           <motion.div key={art.id || art.systemNumber || index}>
             <ArtCard art={art} />
           </motion.div>
         ))}
       </Masonry>
+      {query && !error && !loading && (artworks.length > 0 || page > 1) && (
       <div className="pagination">
         <button
           onClick={() => changePage(Math.max(page - 1, 1))}
@@ -150,6 +166,7 @@ const Artworks = () => {
           Next
         </button>
       </div>
+      )}
     </div>
   );
 };

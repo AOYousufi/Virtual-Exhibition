@@ -47,22 +47,27 @@ const SingleArt = () => {
   const { collections, addItemToCollection, addCollection } = useCollections();
 
   useEffect(() => {
+    const controller = new AbortController();
     setIsLoading(true);
+    setArtDetails(null);
     setError("");
-    fetchArtById(id)
+    fetchArtById(id, controller.signal)
       .then((response) => {
+        if (controller.signal.aborted) return;
         if (!response || Object.keys(response).length === 0) {
           setError("No artwork found for this ID.");
         } else {
           setArtDetails(response);
         }
-        setIsLoading(false);
       })
       .catch((err) => {
-        console.error(err);
-        setError("Failed to load artwork details.");
-        setIsLoading(false);
+        if (controller.signal.aborted) return;
+        setError(err.status === 404 ? "This artwork could not be found." : "Failed to load artwork details. Please try again.");
+      })
+      .finally(() => {
+        if (!controller.signal.aborted) setIsLoading(false);
       });
+    return () => controller.abort();
   }, [id]);
 
   const handleAddToCollection = (collectionId) => {
@@ -265,6 +270,7 @@ const SingleArt = () => {
             <button
               className="close-panel"
               onClick={() => setCollectionPanelOpen(false)}
+              aria-label="Close collection selector"
             >
               ✖
             </button>
